@@ -1,0 +1,54 @@
+cff-version: "1.2.0"
+type: "software"
+date-released: "2026-09-09"
+title: "(Holloway) Chew, Kean Ho's Automaton — Production Testing"
+version: "1.0.0"
+license: "0BSD"
+repository: "https://github.com/ChewKeanHo/software-automaton-test-production"
+repository-code: "https://github.com/ChewKeanHo/software-automaton-test-production"
+repository-artifact: "https://github.com/ChewKeanHo/software-automaton-test-production"
+url: "https://github.com/ChewKeanHo/software-automaton-test-production"
+contact:
+  - affiliation: "(Holloway) Chew, Kean Ho"
+    given-names: "Kean Ho"
+    family-names: "Chew"
+    email: "software@chewkeanho.com"
+    website: "https://software.chewkeanho.com"
+abstract: |-
+  This is a production-grade testing respository for specifically running
+  Automaton as a deployed product. It is meant to test the single action script
+  running on the following continuous integration facilities simultenously:
+
+  * GitHub Action - `linux-latest`
+  * GitHub Action - `windows-latest`
+  * GitHub Action - `macos-latest`
+  * [Forgejo Action](https://forgejo.org/docs/next/user/actions/reference)
+
+  That's about it.
+
+  If you wish to procure `(Holloway) Chew, Kean Ho's Automation`, head over to:
+
+  [https://github.com/ChewKeanHo/software-automaton](https://github.com/ChewKeanHo/software-automaton)
+message: |-
+  Please cite and reference this repository accordingly.
+authors:
+  - given-names: "Kean Ho"
+    family-names: "Chew"
+    email: "software@chewkeanho.com"
+    orcid: "https://orcid.org/0000-0003-4202-4863"
+identifiers:
+  - type: other
+    value: "chewkeanho-software-automaton-test-production"
+    description: "Product SKU Identifier"
+  - type: other
+    value: "77EFA9DB-18A0-4279-A885-BBB5769A116B"
+    description: "Product UUID Identifier"
+keywords:
+  - "testing"
+  - "production"
+  - "automaton"
+  - "automation"
+  - "continuous developed software"
+  - "self-improving software"
+  - "independent software"
+  - "software"

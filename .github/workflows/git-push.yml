@@ -1,0 +1,657 @@
+name: Git Push
+run-name: CI - Git Push
+on:
+  repository_dispatch:
+    types: webhook
+  push:
+    branches:
+      - main
+      - master
+      - stable
+      - next
+      - staging
+      - testing
+      - experimental
+      - edge
+jobs:
+  develop_on:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(vars.RUNNERS || 'throw-unset-RUNNERS-error') }}
+    defaults:
+      run:
+        shell: bash
+    env:
+      TERM: "${{ vars.TERM || 'xterm-256color' }}"
+      RUN_USER_NAME: "${{ secrets.USER_NAME || vars.USER_NAME }}"
+      RUN_USER_EMAIL: "${{ secrets.USER_EMAIL || vars.USER_EMAIL }}"
+      RUN_USER_PASSWORD: "${{ secrets.USER_PASSWORD }}"
+      RUN_USER_IS_UNATTENDED: "${{ secrets.USER_IS_UNATTENDED || vars.USER_IS_UNATTENDED }}"
+      RUN_CONTAINER_USERNAME: "${{ secrets.CONTAINER_USERNAME || vars.CONTAINER_USERNAME }}"
+      RUN_CONTAINER_PASSWORD: "${{ secrets.CONTAINER_PASSWORD }}"
+      RUN_TWINE_USERNAME: "${{ secrets.TWINE_USERNAME || vars.TWINE_USERNAME }}"
+      RUN_TWINE_PASSWORD: "${{ secrets.TWINE_PASSWORD }}"
+      RUN_REPO_SERVER: "${{ secrets.REPO_SERVER || vars.REPO_SERVER }}"
+      RUN_REPO_PROTOCOL: "${{ secrets.REPO_PROTOCOL || vars.REPO_PROTOCOL }}"
+      RUN_REPO_OWNER: "${{ github.repository_owner }}"
+      RUN_REPO_NAME: "${{ github.repository }}"
+      RUN_REPO_COMMIT: "${{ github.sha }}"
+      RUN_REPO_REFERENCE: "${{ github.ref }}"
+      RUN_REPO_SIMULATE_RUN: "${{ secrets.REPO_SIMULATE_RUN || vars.REPO_SIMULATE_RUN }}"
+      REPO_ARTIFACTS: "${{ vars.REPO_ARTIFACTS }}"
+    steps:
+      - name: INIT_WINDOWS
+        id: ci_init_windows
+        if: runner.os == 'Windows'
+        run: |
+          # Initializing Windows -> UNIX Shell Setup
+
+
+          ## check msys2 is available
+          if [ ! -x /c/msys64/usr/bin/bash.exe ]; then
+            case "$PROCESSOR_ARCHITECTURE" in
+            x86_64|X86_64|x64|X64|AMD64)
+              ____program="msys2-x86_64-latest.exe"
+              ;;
+            *)
+              1>&2 printf -- "E: Unsupported CPU architecture: |%s|\n" \
+                              "${PROCESSOR_ARCHITECTURE:-unknown}"
+              exit 1
+              ;;
+            esac
+
+
+            # download installer
+            curl \
+              --fail \
+              --location \
+              --output "$RUNNER_TEMP/msys2-installer.exe" \
+              "https://github.com/msys2/msys2-installer/releases/latest/download/${____program}"
+
+
+            ## install msys2
+            "$RUNNER_TEMP/msys2-installer.exe" install \
+              --root "C:/msys64" \
+              --confirm-command
+          fi
+
+
+          ## install supplimentary packages
+          /c/msys64/usr/bin/bash.exe -lc '
+            pacman -Sy --noconfirm --needed \
+              binutils \
+              ca-certificates \
+              curl \
+              diffutils \
+              findutils \
+              gawk \
+              git \
+              gzip \
+              make \
+              mercurial \
+              patch \
+              perl \
+              rsync \
+              sed \
+              tar \
+              xz \
+              unzip \
+              zip \
+          '
+
+
+          # register to os for UNIX commands
+          echo 'C:\msys64\usr\bin'     >> "$GITHUB_PATH"
+          echo 'C:\msys64\mingw64\bin' >> "$GITHUB_PATH"
+          echo 'C:\msys64\usr\sbin'     >> "$GITHUB_PATH"
+          echo 'C:\msys64\mingw64\sbin' >> "$GITHUB_PATH"
+          echo 'C:\msys64\usr\local\bin'     >> "$GITHUB_PATH"
+          echo 'C:\msys64\mingw64\local\bin' >> "$GITHUB_PATH"
+          echo 'C:\msys64\usr\local\sbin'     >> "$GITHUB_PATH"
+          echo 'C:\msys64\mingw64\local\sbin' >> "$GITHUB_PATH"
+
+
+          ## report status
+          /c/msys64/usr/bin/bash.exe -lc 'uname -s && make --version | head -n1'
+          1>&2 printf -- "S: UNIX Control Installed!"
+      - name: INIT
+        id: ci_init
+        run: |
+          # Initializing Automaton
+
+
+          # sanitize ENV_VARIABLES
+          1>&2 printf -- "%s\n" "I: Sanitizing ENV_VARIABLES..."
+          if [ ! "$GITHUB_ENV" = "" ]; then
+            ENV_VARIABLES="$GITHUB_ENV"
+          else
+            echo "E: No 'ENV_VARIABLES' Is Available."
+            echo "E: Unable to Proceed."
+            echo "E: Bailing Out..."
+            echo ""
+            exit 1
+          fi
+
+
+          # sanitize OS_ARCH
+          1>&2 printf -- "%s\n" "I: Sanitizing OS_ARCH..."
+          case "$(uname -m)" in
+          "")
+            echo "E: No 'OS_ARCH' Is Available."
+            echo "E: Unable to Proceed."
+            echo "E: Bailing Out..."
+            echo ""
+            exit 1
+            ;;
+          x64|X64|amd64|AMD64|x86_64|X86_64)
+            OS_ARCH="amd64"
+            ;;
+          aarch64|arm64)
+            OS_ARCH="arm64"
+            ;;
+          *)
+            OS_ARCH="$(uname -m)"
+            ;;
+          esac
+
+          export OS_ARCH="$OS_ARCH"
+          printf -- "%s\n" "OS_ARCH=${OS_ARCH}" >> "$ENV_VARIABLES"
+
+
+          # sanitize OS_OS
+          1>&2 printf -- "%s\n" "I: Sanitizing OS_OS..."
+          OS_OS="$(uname -s)"
+          case "$(uname -s)" in
+          "")
+            echo "E: No 'OS_OS' Is Available."
+            echo "E: Unable to Proceed."
+            echo "E: Bailing Out..."
+            echo ""
+            exit 1
+            ;;
+          linux*|Linux*|LINUX*)
+            OS_OS="linux"
+            ;;
+          win*|windows*|Windows*|WINDOWS*|MSYS*|MINGW*|CYGWIN*)
+            OS_OS="windows"
+            ;;
+          macos*|MacOS*|MACOS*|Darwin*)
+            OS_OS="darwin"
+            ;;
+          *)
+            OS_OS="$(uname -o)"
+            ;;
+          esac
+
+          export OS_OS="$OS_OS"
+          printf -- "%s\n" "OS_OS=${OS_OS}" >> "$ENV_VARIABLES"
+
+
+          # sanitize REPO_ARTIFACTS
+          1>&2 printf -- "%s\n" "I: Sanitizing REPO_ARTIFACTS..."
+
+
+          # sanitize USER_NAME
+          1>&2 printf -- "%s\n" "I: Sanitizing USER_NAME..."
+          USER_NAME="$RUN_USER_NAME"
+          case "$USER_NAME" in
+          ""|none|None|NONE)
+            echo "E: No 'secrets.USER_NAME' or 'env.USER_NAME' Is Available."
+            echo "E: Unable to Proceed."
+            echo "E: Bailing Out..."
+            echo ""
+            exit 1
+            ;;
+          *)
+            export USER_NAME="$USER_NAME"
+            printf -- "%s\n" "USER_NAME=${USER_NAME}" >> "$ENV_VARIABLES"
+            ;;
+          esac
+
+
+          # sanitize USER_EMAIL
+          1>&2 printf -- "%s\n" "I: Sanitizing USER_EMAIL..."
+          USER_EMAIL="$RUN_USER_EMAIL"
+          case "$RUN_USER_EMAIL" in
+          ""|none|None|NONE)
+            echo "E: No 'secrets.USER_EMAIL' or 'env.USER_EMAIL' Is Available."
+            echo "E: Unable to Proceed."
+            echo "E: Bailing Out..."
+            echo ""
+            exit 1
+            ;;
+          *)
+            export USER_EMAIL="$USER_EMAIL"
+            printf -- "%s\n" "USER_EMAIL=${USER_EMAIL}" >> "$ENV_VARIABLES"
+            ;;
+          esac
+
+
+          # sanitize USER_PASSWORD
+          1>&2 printf -- "%s\n" "I: Sanitizing USER_PASSWORD..."
+          USER_PASSWORD="$RUN_USER_PASSWORD"
+          case "$USER_PASSWORD" in
+          ""|none|None|NONE)
+            echo "E: No 'secrets.USER_PASSWORD' Is Available."
+            echo "E: Unable to Proceed."
+            echo "E: Bailing Out..."
+            echo ""
+            exit 1
+            ;;
+          *)
+            export USER_PASSWORD="$USER_PASSWORD"
+            printf -- "%s\n" "USER_PASSWORD=${USER_PASSWORD}" >> "$ENV_VARIABLES"
+            ;;
+          esac
+
+
+          # sanitize USER_IS_UNATTENDED
+          1>&2 printf -- "%s\n" "I: Sanitizing USER_IS_UNATTENDED..."
+          case "$RUN_USER_IS_UNATTENDED" in
+          false|False|FALSE|0)
+            USER_IS_UNATTENDED=false
+            ;;
+          *)
+            USER_IS_UNATTENDED=true
+            ;;
+          esac
+
+          export USER_IS_UNATTENDED="$USER_IS_UNATTENDED"
+          printf -- "%s\n" "USER_IS_UNATTENDED=${USER_IS_UNATTENDED}" >> "$ENV_VARIABLES"
+
+
+          # sanitize CONTAINER_USERNAME
+          1>&2 printf -- "%s\n" "I: Sanitizing CONTAINER_USERNAME..."
+          CONTAINER_USERNAME="$RUN_CONTAINER_USERNAME"
+          case "$CONTAINER_USERNAME" in
+          "")
+            CONTAINER_USERNAME=""
+            ;;
+          none|None|NONE)
+            CONTAINER_USERNAME=""
+            ;;
+          *)
+            ;;
+          esac
+
+          export CONTAINER_USERNAME="$CONTAINER_USERNAME"
+          printf -- "%s\n" "CONTAINER_USERNAME=${CONTAINER_USERNAME}" >> "$ENV_VARIABLES"
+
+
+          # sanitize CONTAINER_PASSWORD
+          1>&2 printf -- "%s\n" "I: Sanitizing CONTAINER_PASSWORD..."
+          CONTAINER_PASSWORD="$RUN_CONTAINER_PASSWORD"
+          case "$CONTAINER_PASSWORD" in
+          "")
+            CONTAINER_PASSWORD=""
+            ;;
+          none|None|NONE)
+            CONTAINER_PASSWORD=""
+            ;;
+          *)
+            ;;
+          esac
+
+          export CONTAINER_PASSWORD="$CONTAINER_PASSWORD"
+          printf -- "%s\n" "CONTAINER_PASSWORD=${CONTAINER_PASSWORD}" >> "$ENV_VARIABLES"
+
+
+          # sanitize TWINE_USERNAME
+          1>&2 printf -- "%s\n" "I: Sanitizing TWINE_USERNAME..."
+          TWINE_USERNAME="$RUN_TWINE_USERNAME"
+          case "$TWINE_USERNAME" in
+          "")
+            TWINE_USERNAME=""
+            ;;
+          none|None|NONE)
+            TWINE_USERNAME=""
+            ;;
+          *)
+            ;;
+          esac
+
+          export TWINE_USERNAME="$TWINE_USERNAME"
+          printf -- "%s\n" "TWINE_USERNAME=${TWINE_USERNAME}" >> "$ENV_VARIABLES"
+
+
+          # sanitize TWINE_PASSWORD
+          1>&2 printf -- "%s\n" "I: Sanitizing TWINE_PASSWORD..."
+          TWINE_PASSWORD="$RUN_TWINE_PASSWORD"
+          case "$TWINE_PASSWORD" in
+          "")
+            TWINE_PASSWORD=""
+            ;;
+          none|None|NONE)
+            TWINE_PASSWORD=""
+            ;;
+          *)
+            ;;
+          esac
+
+          export TWINE_PASSWORD="$TWINE_PASSWORD"
+          printf -- "%s\n" "TWINE_PASSWORD=${TWINE_PASSWORD}" >> "$ENV_VARIABLES"
+
+
+          # sanitize REPO_SERVER
+          1>&2 printf -- "%s\n" "I: Sanitizing REPO_SERVER..."
+          REPO_SERVER="$RUN_REPO_SERVER"
+          case "$REPO_SERVER" in
+          ""|none|None|NONE)
+            echo "E: No 'secrets.REPO_SERVER' or 'env.REPO_SERVER' Is Available."
+            echo "E: Unable to Proceed."
+            echo "E: Bailing Out..."
+            echo ""
+            exit 1
+            ;;
+          *)
+            ;;
+          esac
+
+          export REPO_SERVER="$REPO_SERVER"
+          printf -- "%s\n" "REPO_SERVER=${REPO_SERVER}" >> "$ENV_VARIABLES"
+
+
+          # sanitize REPO_PROTOCOL
+          1>&2 printf -- "%s\n" "I: Sanitizing REPO_PROTOCOL..."
+          REPO_PROTOCOL="${RUN_REPO_PROTOCOL%":"*}"
+          case "$REPO_PROTOCOL" in
+          ""|none|None|NONE)
+            echo "E: No 'secrets.REPO_PROTOCOL' or 'env.REPO_PROTOCOL' Is Available."
+            echo "E: Unable to Proceed."
+            echo "E: Bailing Out..."
+            echo ""
+            exit 1
+            ;;
+          http|HTTP|https|HTTPS)
+            REPO_PROTOCOL="${REPO_PROTOCOL}://"
+            ;;
+          *)
+            REPO_PROTOCOL="${REPO_PROTOCOL}:"
+            ;;
+          esac
+
+          export REPO_PROTOCOL="$REPO_PROTOCOL"
+          printf -- "%s\n" "REPO_PROTOCOL=${REPO_PROTOCOL}" >> "$ENV_VARIABLES"
+
+
+          # sanitize REPO_OWNER
+          1>&2 printf -- "%s\n" "I: Sanitizing REPO_OWNER..."
+          REPO_OWNER="$RUN_REPO_OWNER"
+          case "$REPO_OWNER" in
+          ""|none|None|NONE)
+            echo "E: No REPO_OWNER Is Available."
+            echo "E: Unable to Proceed."
+            echo "E: Bailing Out..."
+            echo ""
+            exit 1
+            ;;
+          *)
+            ;;
+          esac
+
+          export REPO_OWNER="$REPO_OWNER"
+          printf -- "%s\n" "REPO_OWNER=${REPO_OWNER}" >> "$ENV_VARIABLES"
+
+
+          # sanitize REPO_NAME
+          1>&2 printf -- "%s\n" "I: Sanitizing REPO_NAME..."
+          REPO_NAME="${RUN_REPO_NAME#*"/"}"
+          case "$REPO_NAME" in
+          ""|none|None|NONE)
+            echo "E: Processed REPO_NAME Is Empty."
+            echo "E: Unable to Proceed."
+            echo "E: Bailing Out..."
+            echo ""
+            exit 1
+            ;;
+          *)
+            ;;
+          esac
+
+          export REPO_NAME="$REPO_NAME"
+          printf -- "%s\n" "REPO_NAME=${REPO_NAME}" >> "$ENV_VARIABLES"
+
+
+          # sanitize REPO_COMMIT
+          1>&2 printf -- "%s\n" "I: Sanitizing REPO_COMMIT..."
+          REPO_COMMIT="$RUN_REPO_COMMIT"
+          case "$REPO_COMMIT" in
+          ""|none|None|NONE)
+            echo "E: No REPO_COMMIT Is Available."
+            echo "E: Unable to Proceed."
+            echo "E: Bailing Out..."
+            echo ""
+            exit 1
+            ;;
+          *)
+            ;;
+          esac
+
+          export REPO_COMMIT="$REPO_COMMIT"
+          printf -- "%s\n" "REPO_COMMIT=${REPO_COMMIT}" >> "$ENV_VARIABLES"
+
+
+          # sanitize REPO_REFERENCE
+          1>&2 printf -- "%s\n" "I: Sanitizing REPO_REFERENCE..."
+          REPO_REFERENCE="$RUN_REPO_REFERENCE"
+          case "$REPO_REFERENCE" in
+          ""|none|None|NONE)
+            echo "E: No REPO_REFERENCE Is Available."
+            echo "E: Unable to Proceed."
+            echo "E: Bailing Out..."
+            echo ""
+            exit 1
+            ;;
+          *)
+            ;;
+          esac
+
+          export REPO_REFERENCE="$REPO_REFERENCE"
+          printf -- "%s\n" "REPO_REFERENCE=${REPO_REFERENCE}" >> "$ENV_VARIABLES"
+
+
+          # sanitize REPO_SIMULATE_RUN
+          1>&2 printf -- "%s\n" "I: Sanitizing REPO_SIMULATE_RUN..."
+          case "$RUN_REPO_SIMULATE_RUN" in
+          false|False|FALSE|0)
+            REPO_SIMULATE_RUN=false
+            ;;
+          *)
+            REPO_SIMULATE_RUN=true
+            ;;
+          esac
+
+          export REPO_SIMULATE_RUN="$REPO_SIMULATE_RUN"
+          printf -- "%s\n" "REPO_SIMULATE_RUN=${REPO_SIMULATE_RUN}" >> "$ENV_VARIABLES"
+
+
+          # sanitize REPO_URL
+          1>&2 printf -- "%s\n" "I: Sanitizing REPO_URL..."
+          REPO_URL="$REPO_PROTOCOL"
+          REPO_URL="${REPO_URL}${USER_NAME}:"
+          REPO_URL="${REPO_URL}${USER_PASSWORD}@"
+          REPO_URL="${REPO_URL}${REPO_SERVER}/"
+          REPO_URL="${REPO_URL}${REPO_OWNER}/"
+          REPO_URL="${REPO_URL}${REPO_NAME}.git"
+
+
+          # all good - git fetch repo
+          1>&2 printf -- "%s\n" "I: Fetching Git Repo Matching to REPO_COMMIT/REPO_REFERENCE..."
+          git config --global user.email "$USER_EMAIL"
+          git config --global user.name "$USER_NAME"
+          git config --global advice.detachedHead false
+          git config --global advice.defaultBranchName false
+
+          if [ -d "./.git" ]; then
+            git remote set-url origin "$REPO_URL"
+          else
+            git init
+            git remote add origin "$REPO_URL"
+          fi
+          git fetch --depth=1 origin "$REPO_COMMIT" || \
+            git fetch --depth=1 origin "$REPO_REFERENCE"
+          git reset --hard FETCH_HEAD
+          git clean -fdx
+
+
+          # secure repository with credentialess url
+          1>&2 printf -- "%s\n" "I: Securing Git Repo..."
+          REPO_URL="$REPO_PROTOCOL"
+          REPO_URL="${REPO_URL}${REPO_SERVER}/"
+          REPO_URL="${REPO_URL}${REPO_OWNER}/"
+          REPO_URL="${REPO_URL}${REPO_NAME}.git"
+
+          git remote set-url origin "$REPO_URL"
+
+          export REPO_URL="$REPO_URL"
+          1>&2 printf -- "%s\n" "REPO_URL=${REPO_URL}" >> "$ENV_VARIABLES"
+      - name: INIT_COMPLETED
+        id: ci_init_completed
+        run: |
+          # runner
+          1>&2 printf -- "%s\n" "I: OS_ARCH            : |${OS_ARCH}|"
+          1>&2 printf -- "%s\n" "I: OS_OS              : |${OS_OS}|"
+          1>&2 printf -- "I: REPO_ARTIFACTS     :\n----\n%s\n----\n" "${REPO_ARTIFACTS}"
+
+
+          # user
+          1>&2 printf -- "%s\n" "I: USER_NAME          : |${USER_NAME}|"
+          1>&2 printf -- "%s\n" "I: USER_EMAIL         : |${USER_EMAIL}|"
+          if [ ! "$USER_PASSWORD" = "" ]; then
+            1>&2 printf -- "%s\n" 'I: USER_PASSWORD      : |****|'
+          else
+            1>&2 printf -- "%s\n" 'I: USER_PASSWORD      : ||'
+          fi
+          1>&2 printf -- "%s\n" "I: USER_IS_UNATTENDED : |${USER_IS_UNATTENDED}|"
+
+
+          # container
+          1>&2 printf -- "%s\n" "I: CONTAINER_USERNAME : |${CONTAINER_USERNAME}|"
+          if [ ! "$USER_PASSWORD" = "" ]; then
+            1>&2 printf -- "%s\n" 'I: CONTAINER_PASSWORD : |****|'
+          else
+            1>&2 printf -- "%s\n" 'I: CONTAINER_PASSWORD : ||'
+          fi
+
+
+          # python twine
+          1>&2 printf -- "%s\n" "I: TWINE_USERNAME     : |${TWINE_USERNAME}|"
+          if [ ! "$USER_PASSWORD" = "" ]; then
+            1>&2 printf -- "%s\n" 'I: TWINE_PASSWORD     : |****|'
+          else
+            1>&2 printf -- "%s\n" 'I: TWINE_PASSWORD     : ||'
+          fi
+
+
+          # repository
+          1>&2 printf -- "%s\n" "I: REPO_SERVER        : |${REPO_SERVER}|"
+          1>&2 printf -- "%s\n" "I: REPO_PROTOCOL      : |${REPO_PROTOCOL}|"
+          1>&2 printf -- "%s\n" "I: REPO_OWNER         : |${REPO_OWNER}|"
+          1>&2 printf -- "%s\n" "I: REPO_NAME          : |${REPO_NAME}|"
+          1>&2 printf -- "%s\n" "I: REPO_COMMIT        : |${REPO_COMMIT}|"
+          1>&2 printf -- "%s\n" "I: REPO_SIMULATE_RUN  : |${REPO_SIMULATE_RUN}|"
+          1>&2 printf -- "%s\n" "I: REPO_URL           : |${REPO_URL}|"
+      - name: PURGE
+        id: ci_purge
+        run: |
+          # Deep-Cleaning Workspace
+
+          ./.internals/automaton/Start.sh.ps1 run Purge
+      - name: CLEAN
+        id: ci_clean
+        run: |
+          # Cleaning Workspace
+
+          ./.internals/automaton/Start.sh.ps1 run Clean
+      - name: ENVIRONMENT
+        id: ci_env
+        run: |
+          # Preparing Workspace Environment
+
+          ./.internals/automaton/Start.sh.ps1 run Environment
+      - name: SETUP
+        id: ci_setup
+        run: |
+          # Preparing Project Workspace
+
+          ./.internals/automaton/Start.sh.ps1 run Setup
+      - name: PREPARE
+        id: ci_prepare
+        run: |
+          # Preparing Project Dependencies
+
+          ./.internals/automaton/Start.sh.ps1 run Prepare
+      - name: START
+        id: ci_start
+        run: |
+          # Starting Dependency Services
+
+          ./.internals/automaton/Start.sh.ps1 run Start
+      - name: TEST
+        id: ci_test
+        run: |
+          # Testing Project Integrity
+
+          ./.internals/automaton/Start.sh.ps1 run Test
+      - name: MATERIALIZE
+        id: ci_materialize
+        run: |
+          # Fabricating Production Build for This Instance
+
+          ./.internals/automaton/Start.sh.ps1 run Materialize
+      - name: BUILD
+        id: ci_build
+        run: |
+          # Fabricating Production Build
+
+          ./.internals/automaton/Start.sh.ps1 run Build
+      - name: NOTARIZE
+        id: ci_notarize
+        run: |
+          # Notarizing Production Build
+
+          ./.internals/automaton/Start.sh.ps1 run Notarize
+      - name: PACKAGE
+        id: ci_package
+        run: |
+          # Packaging Production Build
+
+          ./.internals/automaton/Start.sh.ps1 run Package
+      - name: RELEASE
+        id: ci_release
+        run: |
+          # Releasing Packages to Stores
+
+          ./.internals/automaton/Start.sh.ps1 run Release
+      - name: STOP
+        id: ci_stop
+        run: |
+          # Stopping Dependency Services
+
+          ./.internals/automaton/Start.sh.ps1 run Stop
+      - name: DEPLOY
+        id: ci_deploy
+        run: |
+          # Deploying Production Build
+
+          ./.internals/automaton/Start.sh.ps1 run Deploy
+      - name: COMPOSE
+        id: ci_compose
+        run: |
+          # Composing Documentations
+
+          ./.internals/automaton/Start.sh.ps1 run Compose
+      - name: PUBLISH
+        id: ci_publish
+        run: |
+          # Publishing Documentations
+
+          ./.internals/automaton/Start.sh.ps1 run Publish
+      - name: ARCHIVE
+        id: ci_archive
+        if: always()
+        run: |
+          # Archive Artifact Files
+
+          ./.internals/automaton/Start.sh.ps1 run Archive

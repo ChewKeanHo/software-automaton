@@ -1,0 +1,147 @@
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "trigger") && $CI_COMMIT_BRANCH =~ /^(main|master|stable|next|testing|staging|edge|experimental)$/'
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == "pages"'
+    - when: never
+
+
+stages:
+  - Production
+  - Deploy
+
+
+variables:
+  TERM: "xterm-256color"
+  RUNNERS: ""
+  USER_NAME: ""
+  USER_EMAIL: ""
+  USER_PASSWORD: ""
+  USER_IS_UNATTENDED: "true"
+  REPO_SERVER: "$CI_SERVER_HOST"
+  REPO_PROTOCOL: "https"
+  REPO_OWNER: "$CI_PROJECT_NAMESPACE"
+  REPO_NAME: "$CI_PROJECT_NAME"
+  REPO_COMMIT: "$CI_COMMIT_SHA"
+  REPO_REFERENCE: "$CI_COMMIT_REF_NAME"
+  REPO_SIMULATE_RUN: "true"
+  REPO_ARTIFACTS: ""
+  RUN_CONTAINER_USERNAME: ""
+  RUN_CONTAINER_PASSWORD: ""
+  RUN_TWINE_USERNAME: ""
+  RUN_TWINE_PASSWORD: ""
+
+
+pages:
+  image: debian:latest
+  tags:
+    - saas-linux-small-amd64 # gitLab.com shared runner
+    - saas-linux-medium-amd64 # gitLab.com shared runner
+    - saas-linux-large-amd64 # gitlab.com shared runner
+    - saas-linux-xlarge-amd64 # gitlab.com shared runner
+    - saas-linux-2xlarge-amd64 # gitlab.com shared runner
+    - saas-linux-small-arm64 # gitlab.com shared runner
+    - saas-linux-medium-arm64 # gitlab.com shared runner
+    - saas-linux-large-arm64 # gitlab.com shared runner
+    - linux-amd64
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'pages'
+  when: manual
+  script:
+    - mkdir -p public/
+    - find . ! -name public ! -name . ! -name .git ! -name .gitlab-ci.yml -exec mv {} public/ \;
+  artifacts:
+    paths:
+      - public/
+
+
+.linux:
+  image: debian:latest
+  tags:
+    - saas-linux-small-amd64 # gitLab.com shared runner
+    - saas-linux-medium-amd64 # gitLab.com shared runner
+    - saas-linux-large-amd64 # gitlab.com shared runner
+    - saas-linux-xlarge-amd64 # gitlab.com shared runner
+    - saas-linux-2xlarge-amd64 # gitlab.com shared runner
+    - saas-linux-small-arm64 # gitlab.com shared runner
+    - saas-linux-medium-arm64 # gitlab.com shared runner
+    - saas-linux-large-arm64 # gitlab.com shared runner
+    - linux-amd64
+  rules:
+    - if: '$RUNNERS =~ /linux/'
+
+
+.macos:
+  image: macos-26-xcode-26
+  tags:
+    - saas-macos-medium-m1 # gitlab.com shared runner
+    - saas-macos-large-m2pro # gitlab.com shared runner
+    - darwin-arm64
+  rules:
+    - if: '$RUNNERS =~ /macos/'
+
+
+.windows:
+  tags:
+    - saas-windows-medium-amd64 # gitlab.com shared runner
+  rules:
+    - if: '$RUNNERS =~ /windows/'
+
+
+.steps:
+  stage: Production
+  script:
+    - ./.internals/automaton/Start.sh.ps1 run Init
+    - ./.internals/automaton/Start.sh.ps1 run Purge
+    - ./.internals/automaton/Start.sh.ps1 run Clean
+    - ./.internals/automaton/Start.sh.ps1 run Environment
+    - ./.internals/automaton/Start.sh.ps1 run Setup
+    - ./.internals/automaton/Start.sh.ps1 run Prepare
+    - ./.internals/automaton/Start.sh.ps1 run Start
+    - ./.internals/automaton/Start.sh.ps1 run Test
+    - ./.internals/automaton/Start.sh.ps1 run Materialize
+    - ./.internals/automaton/Start.sh.ps1 run Build
+    - ./.internals/automaton/Start.sh.ps1 run Notarize
+    - ./.internals/automaton/Start.sh.ps1 run Package
+    - ./.internals/automaton/Start.sh.ps1 run Release
+    - ./.internals/automaton/Start.sh.ps1 run Stop
+    - ./.internals/automaton/Start.sh.ps1 run Deploy
+    - ./.internals/automaton/Start.sh.ps1 run Compose
+    - ./.internals/automaton/Start.sh.ps1 run Publish
+    - ./.internals/automaton/Start.sh.ps1 run Archive
+
+
+
+
+run-linux-latest:
+  extends: [.linux, .steps]
+  stage: Production
+  before_script:
+    - apt-get update -y
+    - apt-get install -y git curl
+    - git config --global user.email "$ROBOT_NAME"
+    - git config --global user.name "$ROBOT_EMAIL"
+    - git config --global advice.detachedHead false
+    - git checkout $REPO_COMMIT
+
+
+
+
+run-macos-latest:
+  extends: [.macos, .steps]
+  stage: Production
+  before_script:
+    - git config --global user.email "$ROBOT_NAME"
+    - git config --global user.name "$ROBOT_EMAIL"
+    - git config --global advice.detachedHead false
+    - git checkout $REPO_COMMIT
+
+
+
+
+run-windows-latest:
+  extends: [.macos, .steps]
+  before_script:
+    - git config --global user.email "${env:ROBOT_NAME}"
+    - git config --global user.name "${env:ROBOT_EMAIL}"
+    - git config --global advice.detachedHead false
+    - git checkout ${env:REPO_COMMIT}
