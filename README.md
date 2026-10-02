@@ -1,27 +1,116 @@
-# Automaton — Production Testing | (Holloway) Chew, Kean Ho's Software
+```
+_______ _     _ _______  _____  _______ _______ _______  _____  __   __
+|_____| |     |    |    |     | |  |  | |_____|    |    |     | | \\  |
+|     | |_____|    |    |_____| |  |  | |     |    |    |_____| |  \\_|
+```
+
+# Automaton | (Holloway) Chew, Kean Ho's Software
 
 [![banner](/.internals/trademarks/banner_1200x100.svg)](#)
 
-This is a production-grade testing respository for specifically running
-Automaton as a deployed product. It is meant to test the single action script
-running on the following continuous integration facilities simultenously:
+***Automate Reliably. Scale Confidently.***
 
-* GitHub Action - `linux-latest`
-* GitHub Action - `windows-latest`
-* GitHub Action - `macos-latest`
-* Codeberg.org  - `codeberg-tiny`
-* Codeberg.org  - `codeberg-tiny-lazy`
-* Codeberg.org  - `codeberg-small`
-* Codeberg.org  - `codeberg-small-lazy`
-* Codeberg.org  - `codeberg-medium`
-* Codeberg.org  - `codeberg-medium-lazy`
-* [Forgejo Action](https://forgejo.org/docs/next/user/actions/reference)
+`Automaton` is `(Holloway) Chew, Kean Ho`'s production-grade automation
+toolchain that unifies your CI jobs across platforms using plain shell and
+PowerShell scripts, bootstrapped by a single polyglot script. This includes
+manual human intervention where one can debug the processes at will without
+affecting the CI pipelines.
 
-That's about it.
+It solves the following business problems:
 
-If you wish to procure `(Holloway) Chew, Kean Ho's Automation`, head over to:
+* **No Vendor Lock-In** - Take full control over your production process
+  entirely. Your pipelines live in your repository, not in any provider's
+  console. Hence, they outlive any single vendor's pricing or roadmap changes.
+* **Zero Runtime Dependencies** - It just works! Automaton boots with what each
+  OS already ships: a POSIX shell on Linux/macOS, PowerShell on Windows. Nothing
+  to install before first use. In fact, use Automaton to install the tools and
+  set up the environment instead!
+* **Manual Intervention Capable** - Test any CI job on your own laptop before
+  it touches CI: no more silly, noisy "fix CI" commits.
+* **Full Downstream Freedom** - It merely streamlines all triggers into your
+  CI shell scripts. You develop your own processes therein with absolute
+  freedom!
+* **Lightweight to Install** - Just unpack a few shell and PowerShell scripts.
+  No complicated installer. No unused bloat.
+* **Tested Across Platforms** - GitHub.com, GitLab.com, Codeberg.org,
+  self-hosted Forgejo, etc. This project tests on them whenever runners are
+  available.
+* **Learnt From The Past** - 2nd generation development based on learning from
+  its predecessor: the [`(Holloway) Chew, Kean Ho's AutomataCI`](https://github.com/ChewKeanHo/software-automataci).
 
-[https://github.com/ChewKeanHo/software-automaton](https://github.com/ChewKeanHo/software-automaton)
+
+
+
+## Tested Platforms
+
+[![banner](/.internals/trademarks/banner_1200x100.svg)](#)
+
+These are the currently linked and tested platforms where
+`(Holloway) Chew, Kean Ho's Automaton` is expected to work seamlessly:
+
+| Platforms         | Runners          | Dashboard |
+|:------------------|:-----------------|:----------|
+| GitHub Actions    | `linux-latest`, `windows-latest`, `macos-latest` | [GitHub Actions Pipelines](https://github.com/ChewKeanHo/software-automaton/actions/workflows/git-push.yml) |
+| Codeberg.org Actions  | `codeberg-tiny`, `codeberg-tiny-lazy`, `codeberg-small`, `codeberg-small-lazy`, `codeberg-medium`, `codeberg-medium-lazy` | [Codeberg.org Actions Pipeline](https://codeberg.org/chewkeanho/software-automaton/actions) |
+| Forgejo Actions  | private tags | [References](https://forgejo.org/docs/next/user/actions/reference) |
+| GitLab.com | `runner-saas-linux-small-amd64`, `saas-windows-medium-amd64` | [GitLab CI Pipelines](https://gitlab.com/chewkeanho/software-automaton/-/pipelines) |
+
+
+
+
+## How It Works
+
+[![banner](/.internals/trademarks/banner_1200x100.svg)](#)
+
+The whole idea to unify both `Microsoft Windows` and `UNIX-based` operating
+systems comes down to
+[`(Holloway) Chew, Kean Ho's The Polyglot Scripts Research Project`](https://doi.org/10.5281/zenodo.19805433).
+Without the polyglot shell scripts, it is **VERY DIFFICULT** to unite all the
+operating systems without compromise.
+
+The sequence of actions are as follows:
+
+```
+trigger
+  |
+  ▼
+.internals/automaton/Start.sh.ps1
+  |
+  ▼
+.internals/automaton/presenters/init.{sh,ps1}
+  |
+  ▼
+.internals/ci/jobs/[JOB]/start.{sh,ps1}
+```
+
+1. A human, robot, or schedule triggers the repository's CI pipeline.
+2. Every trigger calls the `.internals/automaton/Start.sh.ps1` polyglot script.
+3. The polyglot script natively identifies the shell type and locates the
+   project's init shell or PowerShell script (defaulting to
+   `.internals/automaton/presenters/init.{sh,ps1}`).
+4. The polyglot script sources the init script to initialize the CI and locate
+   the CI job directory via the `$AUTOMATON_DIRECTORY_JOBS` environment
+   variable.
+5. Automaton searches for the job's start script (default:
+   `.internals/ci/jobs/[JOB]/start.{sh,ps1}`).
+6. Automaton source-imports (a.k.a. 'dot-imports') the job start script and
+   hands control over.
+
+That is all. It is now this simple compared to its predecessor. You get the full
+freedom to develop your own process freely in the job's start scripts.
+
+Due to this nature, human can intervene the automation process at any step for
+localized process debugging and testing. Hence, one can test any job within the
+laptop and computer before it touches actual CI pipelines.
+
+
+
+
+## Installation
+
+[![banner](/.internals/trademarks/banner_1200x100.svg)](#)
+
+**COMING SOON**
 
 
 
@@ -120,15 +209,15 @@ This license **DOES NOT** mandate attribution requirement. Unless absolutely
 needed, you may attribute back to the creator(s) as follows:
 
 ```
-Title: Automaton — Production Testing
-Creators: hello@chewkeanho.com
+Title: (Holloway) Chew, Kean Ho's Automaton
+Creators: (Holloway) Chew, Kean Ho
 Contact: hello@chewkeanho.com
-SKU: chewkeanho-software-automaton-test-production
+SKU: chewkeanho-software-automaton
 UUID: 77EFA9DB-18A0-4279-A885-BBB5769A116B
 License: BSD Zero Clause License (https://opensource.org/licenses/0BSD)
 Repository Made On: 2026-09-09
 Repository Made From: Malaysia, South East Asia
-Procure: https://github.com/ChewKeanHo/software-automaton-test-production
+Procure: https://github.com/ChewKeanHo/software-automaton
 ```
 
 

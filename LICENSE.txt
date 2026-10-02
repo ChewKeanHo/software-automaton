@@ -1,4 +1,4 @@
-Copyright 2026 The Automaton — Production Testing Project Team (https://github.com/ChewKeanHo/software-automaton-test-production)
+Copyright 2026 The Automaton Project Team (https://github.com/ChewKeanHo/software-automaton)
 
 The above unified aliases have one or more actual legal entities listed outside
 of this document: (1) 'CREATORS.txt' or 'AUTHORS.txt'; and
