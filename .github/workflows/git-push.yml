@@ -21,13 +21,13 @@ jobs:
       matrix: ${{ fromJSON(vars.RUNNERS || 'throw-unset-RUNNERS-error') }}
     env:
       TERM: "${{ vars.TERM || 'xterm-256color' }}"
-      USER_NAME: "${{ secrets.USER_NAME || vars.USER_NAME || 'Runner Unit' }}"
+      USER_NAME: "${{ secrets.USER_NAME || vars.USER_NAME || 'Actions Runner Unit' }}"
       USER_EMAIL: "${{ secrets.USER_EMAIL || vars.USER_EMAIL || 'runner-no-reply@example.com' }}"
       REPO_SERVER: "${{ secrets.REPO_SERVER || vars.REPO_SERVER || github.server_url }}"
-      REPO_OWNER: "${{ github.repository_owner }}"
-      REPO_NAME: "${{ github.repository }}"
-      REPO_COMMIT: "${{ github.sha }}"
-      REPO_REFERENCE: "${{ github.ref }}"
+      REPO_OWNER: "${{ secrets.REPO_OWNER || vars.REPO_OWNER || github.repository_owner }}"
+      REPO_NAME: "${{ secrets.REPO_NAME || vars.REPO_NAME || github.repository }}"
+      REPO_COMMIT: "${{ secrets.REPO_COMMIT || vars.REPO_COMMIT || github.sha }}"
+      REPO_REFERENCE: "${{ secrets.REPO_REFERENCE || vars.REPO_REFERENCE || github.ref }}"
     steps:
       - name: INIT
         id: ci_init
