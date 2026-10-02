@@ -25,7 +25,7 @@
 
 
 
-# print trademark as header
+# print demo
 1>&2 printf -- "%s\n" "Hello World, from 'Prepare'."
 
 

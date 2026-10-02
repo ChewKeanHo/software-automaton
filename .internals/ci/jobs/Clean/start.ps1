@@ -1,4 +1,3 @@
-#!/bin/sh
 # Copyright 2026 The Automaton Project Team (https://github.com/ChewKeanHo/software-automaton)
 #
 # The above unified aliases have one or more actual legal entities listed
@@ -26,7 +25,7 @@
 
 
 # print demo
-1>&2 printf -- "%s\n" "Hello World, from 'Release'."
+$null = Write-Host "Hello World, from 'Clean'."
 
 
 

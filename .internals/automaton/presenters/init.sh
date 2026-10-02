@@ -25,82 +25,6 @@
 
 
 
-# locate AUTOMATON_DIRECTORY.
-# This is already set by the scanner Start.sh.ps1 script. Hence, no additional
-# work is required.
-#
-# If it is unset, this means the script is operating using invalid method to
-# initialize so it **MUST** be failed at all time.
-if [ "$AUTOMATON_DIRECTORY" = "" ]; then
-	1>&2 printf -- "%s" "\
-E: '\$AUTOMATON_DIRECTORY' -> ?!?!  <- Dev!!!
-
-"
-	return 1
-elif [ "${AUTOMATON_DIRECTORY%"init.sh"}" = "$AUTOMATON_DIRECTORY" ]; then
-	1>&2 printf -- "%s" "\
-E: '\$AUTOMATON_DIRECTORY' -> ?!?!  <- Dev!!!
-
-"
-	return 1
-elif [ ! -f "$AUTOMATON_DIRECTORY" ]; then
-	1>&2 printf -- "%s" "\
-E: '\$AUTOMATON_DIRECTORY' -> ?!?!  <- Dev!!!
-
-"
-	return 1
-fi
-
-
-
-
-# save AUTOMATON_DIRECTORY_PWD current directory
-AUTOMATON_DIRECTORY_PWD="$PWD"
-
-
-
-
-# locate AUTOMATON_DIRECTORY_PROJECT directory
-AUTOMATON_DIRECTORY_PROJECT="$PWD"
-while true; do
-	if [ "$AUTOMATON_DIRECTORY_PROJECT" = "/" ]; then
-		1>&2 printf -- "%s" "\
-E: '\$AUTOMATON_DIRECTORY_PROJECT' -> ?!?!  <- Dev!!!
-
-"
-		return 1
-	elif [ -d "${AUTOMATON_DIRECTORY_PROJECT}/.git" ]; then
-		break
-	fi
-
-	AUTOMATON_DIRECTORY_PROJECT="${AUTOMATON_DIRECTORY_PROJECT%/*}"
-done
-
-
-
-
-# locate the localized AUTOMATON_DIRECTORY_ROOT App directory
-if [ -f "${AUTOMATON_DIRECTORY_PROJECT}/.internals/automaton/app/presenters/init.sh" ]; then
-	AUTOMATON_DIRECTORY_ROOT="${AUTOMATON_DIRECTORY_PROJECT}/.internals/automaton/app"
-else
-	AUTOMATON_DIRECTORY_ROOT="${AUTOMATON_DIRECTORY%"init.sh"}"
-	AUTOMATON_DIRECTORY_ROOT="${AUTOMATON_DIRECTORY_ROOT%"/"}"
-	AUTOMATON_DIRECTORY_ROOT="${AUTOMATON_DIRECTORY_ROOT%"presenters"}"
-	AUTOMATON_DIRECTORY_ROOT="${AUTOMATON_DIRECTORY_ROOT%"/"}"
-fi
-
-
-
-
-# define all directory names
-AUTOMATON_DIRECTORY_JOBS="\
-${AUTOMATON_DIRECTORY_JOBS:-"${AUTOMATON_DIRECTORY_PROJECT}/.internals/ci/jobs"}\
-"
-AUTOMATON_DIRECTORY_JOBS="${AUTOMATON_DIRECTORY_JOBS%/}"
-
-
-
-
 # import libraries
 AUTOMATON_Print_Error() {
 	#____content="$1"
@@ -293,8 +217,94 @@ AUTOMATON_Read_Terminal_Color_Mode() {
 }
 
 
+
+
 # configure console colors
 AUTOMATON_COLOR_MODE="$(AUTOMATON_Read_Terminal_Color_Mode)"
+
+
+
+
+# locate AUTOMATON_DIRECTORY.
+# This is already set by the scanner Start.sh.ps1 script. Hence, no additional
+# work is required.
+#
+# If it is unset, this means the script is operating using invalid method to
+# initialize so it **MUST** be failed at all time.
+if [ "$AUTOMATON_DIRECTORY" = "" ]; then
+	AUTOMATON_Print_Error "\
+'\$AUTOMATON_DIRECTORY' -> ?!?!  <- Dev!!!
+
+" "$AUTOMATON_COLOR_MODE"
+	return 1
+elif [ "${AUTOMATON_DIRECTORY%"init.sh"}" = "$AUTOMATON_DIRECTORY" ]; then
+	AUTOMATON_Print_Error "\
+'\$AUTOMATON_DIRECTORY' -> ?!?!  <- Dev!!!
+
+" "$AUTOMATON_COLOR_MODE"
+	return 1
+elif [ ! -f "$AUTOMATON_DIRECTORY" ]; then
+	AUTOMATON_Print_Error "\
+'\$AUTOMATON_DIRECTORY' -> ?!?!  <- Dev!!!
+
+" "$AUTOMATON_COLOR_MODE"
+	return 1
+fi
+
+
+
+
+# save AUTOMATON_DIRECTORY_PWD current directory
+AUTOMATON_DIRECTORY_PWD="$PWD"
+
+
+
+
+# locate AUTOMATON_DIRECTORY_PROJECT directory
+AUTOMATON_DIRECTORY_PROJECT="$PWD"
+while true; do
+	if [ "$AUTOMATON_DIRECTORY_PROJECT" = "/" ]; then
+		AUTOMATON_Print_Error "\
+'\$AUTOMATON_DIRECTORY_PROJECT' -> ?!?!  <- Dev!!!
+
+" "$AUTOMATON_COLOR_MODE"
+		return 1
+	elif [ -d "${AUTOMATON_DIRECTORY_PROJECT}/.git" ]; then
+		break
+	fi
+
+	AUTOMATON_DIRECTORY_PROJECT="${AUTOMATON_DIRECTORY_PROJECT%/*}"
+done
+
+
+
+
+# locate the localized AUTOMATON_DIRECTORY_ROOT App directory
+if [ -f "${AUTOMATON_DIRECTORY_PROJECT}/.internals/automaton/app/presenters/init.sh" ]; then
+	AUTOMATON_DIRECTORY_ROOT="${AUTOMATON_DIRECTORY_PROJECT}/.internals/automaton/app"
+else
+	AUTOMATON_DIRECTORY_ROOT="${AUTOMATON_DIRECTORY%"init.sh"}"
+	AUTOMATON_DIRECTORY_ROOT="${AUTOMATON_DIRECTORY_ROOT%"/"}"
+	AUTOMATON_DIRECTORY_ROOT="${AUTOMATON_DIRECTORY_ROOT%"presenters"}"
+	AUTOMATON_DIRECTORY_ROOT="${AUTOMATON_DIRECTORY_ROOT%"/"}"
+fi
+
+
+
+
+# define all directory names
+AUTOMATON_DIRECTORY_JOBS="\
+${AUTOMATON_DIRECTORY_JOBS:-"${AUTOMATON_DIRECTORY_PROJECT}/.internals/ci/jobs"}\
+"
+AUTOMATON_DIRECTORY_JOBS="${AUTOMATON_DIRECTORY_JOBS%/}"
+
+
+## setup relative ____job_location for error and help printout
+____job_location="${AUTOMATON_DIRECTORY_JOBS##"$AUTOMATON_DIRECTORY_PWD"}"
+if [ ! "$____job_location" = "$AUTOMATON_DIRECTORY_JOBS" ]; then
+	____job_location="${____job_location#"/"}"
+	____job_location="./${____job_location}"
+fi
 
 
 
@@ -310,9 +320,26 @@ run)
 			})
 			return $?
 		fi
+
+		AUTOMATON_Print_Error "\
+'${2:-}' = '${____job_location}/${2:-}/start.sh' => ???
+
+
+
+
+" "$AUTOMATON_COLOR_MODE"
 	fi
 	;;
+-h|help|Help|HELP)
+	;;
 *)
+		AUTOMATON_Print_Error "\
+'${1:-}' => ???
+
+
+
+
+" "$AUTOMATON_COLOR_MODE"
 	;;
 esac
 
@@ -343,6 +370,10 @@ if [ ! "${AUTOMATON_DIRECTORY_JOBS:-}" = "" ]; then
 	fi
 fi
 
+if [ "$____jobs" = "" ]; then
+	____jobs="----"
+fi
+
 	____message="\
 (Holloway) Chew, Kean Ho's
 _______ _     _ _______  _____  _______ _______ _______  _____  __   __
@@ -352,12 +383,12 @@ _________________________________________________________________________
 v0.0.1
 0bsd
 
-$ [COMMAND] run [JOB] -> ./.internals/ci/[JOB]/start.{sh,ps1}
+$ [COMMAND] run [JOB] -> ${____job_location}/[JOB]/start.{sh,ps1}
 $ [COMMAND] help
 _________________________________________________________________________
 
 [JOBS]:
-${____jobs:-"----"}
+${____jobs}
 
 
 AUTOMATON_DIRECTORY_PWD:
