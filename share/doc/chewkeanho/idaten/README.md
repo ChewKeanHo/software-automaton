@@ -41,7 +41,6 @@ It solves the following business problems:
 
 ## Tested Platforms
 
-[![banner](/.internals/trademarks/banner_1200x100.svg)](#)
 
 These are the currently linked and tested platforms where
 `(Holloway) Chew, Kean Ho's Automaton` is expected to work seamlessly:
@@ -59,7 +58,6 @@ These are the currently linked and tested platforms where
 
 ## How It Works
 
-[![banner](/.internals/trademarks/banner_1200x100.svg)](#)
 
 The whole idea to unify both `Microsoft Windows` and `UNIX-based` operating
 systems came from
@@ -107,7 +105,6 @@ the laptop and computer before it touches actual CI pipelines.
 
 ## Installation & Updates
 
-[![banner](/.internals/trademarks/banner_1200x100.svg)](#)
 
 To use `(Holloway) Chew, Kean Ho's Automaton` in your next project, the best
 practices for installing, uninstalling, and updating are as follows:
@@ -381,7 +378,6 @@ Enjoy!
 
 ## Verifying Content Integrity
 
-[![banner](/.internals/trademarks/banner_1200x100.svg)](#)
 
 To secure the content from unauthorized modification by anyone down to bit-level
 (`0|1`), they are cryptographically signed using one or more cryptography tools
@@ -429,7 +425,6 @@ $ openssl dgst -verify /path/to/pubkey.pem -signature /path/to/file.sig /path/to
 
 ## Artificial Intelligence (A.I.) Decrees
 
-[![banner](/.internals/trademarks/banner_1200x100.svg)](#)
 
 Please refer to [AI_DECREES.md](AI_DECREES.md) for the project's policy on the
 use of Artificial Intelligence.
@@ -439,7 +434,6 @@ use of Artificial Intelligence.
 
 ## Maintainers' Notes
 
-[![banner](/.internals/trademarks/banner_1200x100.svg)](#)
 
 Please refer to [CONTRIBUTING.md](CONTRIBUTING.md) for contributing &
 maintenances guidelines.
@@ -449,7 +443,6 @@ maintenances guidelines.
 
 ## License
 
-[![banner](/.internals/trademarks/banner_1200x100.svg)](#)
 
 This entire repository is licensed under [BSD Zero Clause License](LICENSE.txt).
 To ensure better understanding of this license, the following sub-sections will
