@@ -458,6 +458,11 @@ Repository Made From: Malaysia, South East Asia
 Procure: https://github.com/ChewKeanHo/software-automaton
 ```
 
+> [!CAUTION]
+>
+> **No attribution DOES NOT means you can OVERWRITE the copyright claims**. The
+> team still owns the copyright. You just don't have to mention us.
+
 
 
 ### Ownership - Personal
