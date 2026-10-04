@@ -36,6 +36,7 @@ PROJECT_DIRECTORY_ROOT="$PWD"
 PROJECT_DIRECTORY_INTERNAL="${PROJECT_DIRECTORY_ROOT}/.internals"
 PROJECT_DIRECTORY_SHARE="${PROJECT_DIRECTORY_ROOT}/share/doc/chewkeanho/idaten"
 PROJECT_DIRECTORY_SRC="${PROJECT_DIRECTORY_ROOT}/src/chewkeanho/idaten"
+PROJECT_DIRECTORY_TMP="${PROJECT_DIRECTORY_ROOT}/.local/tmp"
 PROJECT_DIRECTORY_PKG="${PROJECT_DIRECTORY_ROOT}/pkg"
 
 
@@ -56,6 +57,51 @@ ${VERSION} | 0bsd
 
 
 
+# checking dependencies
+1>&2 printf -- "%s" "\
+
+I: Checking Dependencies Now...
+"
+for ____command in "tar" "zip" "gpg" "rm" "sync" "mkdir" "cp"; do
+	command -v "$____command" > /dev/null 2> /dev/null
+	if [ $? -ne 0 ]; then
+		1>&2 printf -- "%s" "\
+E: '${____command}' = MISSING
+E: Unable to Proceed.
+E: Bailing Out...
+
+"
+		exit 1
+	else
+		1>&2 printf -- "%s" "\
+I: '${____command}' = OK
+"
+	fi
+done
+
+
+
+
+# checking GPG key availability
+1>&2 printf -- "%s" "\
+
+I: Checking GPG Signing Key...
+"
+gpg --list-secret-keys 49B7878749107ED9C456267ACFD3316C29873FB5 \
+	> /dev/null \
+	2> /dev/null
+if [ $? -ne 0 ]; then
+		1>&2 printf -- "%s" "\
+E: Missing Secret Key For Singing.
+E: Unable to Proceed.
+E: Bailing Out...
+
+"
+fi
+
+
+
+
 # remove existing output directories
 1>&2 printf -- "%s" "\
 
@@ -63,10 +109,12 @@ I: Purging Package Workspace Now...
 "
 rm -rf "$PROJECT_DIRECTORY_SRC" > /dev/null 2> /dev/null
 rm -rf "$PROJECT_DIRECTORY_SHARE" > /dev/null 2> /dev/null
+rm -rf "$PROJECT_DIRECTORY_TMP" > /dev/null 2> /dev/null
 rm -rf "$PROJECT_DIRECTORY_PKG" > /dev/null 2> /dev/null
 sync "$PROJECT_DIRECTORY_ROOT" > /dev/null 2> /dev/null
 mkdir -p "$PROJECT_DIRECTORY_SRC"
 mkdir -p "$PROJECT_DIRECTORY_SHARE"
+mkdir -p "$PROJECT_DIRECTORY_TMP"
 mkdir -p "$PROJECT_DIRECTORY_PKG"
 
 
@@ -78,6 +126,10 @@ ${PROJECT_DIRECTORY_INTERNAL}/automaton|:|${PROJECT_DIRECTORY_SRC}/.
 ${PROJECT_DIRECTORY_INTERNAL}/ci|:|${PROJECT_DIRECTORY_SRC}/.
 ${PROJECT_DIRECTORY_ROOT}/.github/workflows/git-push.yml|:|${PROJECT_DIRECTORY_SRC}/github-ci.yml
 ${PROJECT_DIRECTORY_ROOT}/.gitlab/ci.yml|:|${PROJECT_DIRECTORY_SRC}/gitlab-ci.yml
+${PROJECT_DIRECTORY_INTERNAL}/automaton|:|${PROJECT_DIRECTORY_TMP}/.
+${PROJECT_DIRECTORY_INTERNAL}/ci|:|${PROJECT_DIRECTORY_TMP}/.
+${PROJECT_DIRECTORY_ROOT}/.github/workflows/git-push.yml|:|${PROJECT_DIRECTORY_TMP}/github-ci.yml
+${PROJECT_DIRECTORY_ROOT}/.gitlab/ci.yml|:|${PROJECT_DIRECTORY_TMP}/gitlab-ci.yml
 " | while IFS="" read -r ____line || [ -n "$____line" ]; do
 	if [ "$____line" = "" ]; then
 		continue
@@ -123,7 +175,6 @@ E: Bailing Out...
 		exit 1
 	fi
 
-
 	## filter all trademark banner off downstream
 1>&2 printf -- "%s" "\
 
@@ -137,7 +188,7 @@ I: Packing '${____item}'...
 		____item="${____item##*"$PROJECT_DIRECTORY_ROOT"}"
 		____item="${____item="/"}"
 		printf -- "%s\n" "$____line" \
-			>> "${PROJECT_DIRECTORY_SRC%/}/${____item}"
+			>> "${PROJECT_DIRECTORY_TMP%/}/${____item}"
 		printf -- "%s\n" "$____line" \
 			>> "${PROJECT_DIRECTORY_SHARE%/}/${____item}"
 		printf -- "%s\n" "$____line" \
@@ -160,7 +211,7 @@ unset ____item
 
 # archive now
 ____pwd="$PWD"
-cd "$PROJECT_DIRECTORY_SRC"
+cd "$PROJECT_DIRECTORY_TMP"
 for ____item in \
 "chewkeanho_automaton_${VERSION}_linux_all.tar.xz" \
 "chewkeanho_automaton_${VERSION}_linux_all.tar.gz" \
@@ -211,7 +262,7 @@ for ____item in "${PROJECT_DIRECTORY_PKG}/"*; do
 		continue
 	fi
 
-	## gpg-sign
+	## gpg-sign artifact item
 	1>&2 printf -- "%s" "\
 
 I: GPG-Signing '${____item}'...
@@ -248,12 +299,13 @@ fi
 
 
 
+
 # clean up
 1>&2 printf -- "%s" "\
 
 I: Cleaning Up...
 "
-rm -f "${PROJECT_DIRECTORY_SRC}/"* > /dev/null 2> /dev/null
+rm -rf "$PROJECT_DIRECTORY_TMP" > /dev/null 2> /dev/null
 
 
 

@@ -1,0 +1,152 @@
+name: Git Push
+run-name: CI - Git Push
+on:
+  repository_dispatch:
+    types: webhook
+  push:
+    branches:
+      - main
+      - master
+      - stable
+      - next
+      - staging
+      - testing
+      - experimental
+      - edge
+jobs:
+  develop_on:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(vars.RUNNERS || 'throw-unset-RUNNERS-error') }}
+    env:
+      TERM: "${{ vars.TERM || 'xterm-256color' }}"
+      USER_NAME: "${{ secrets.USER_NAME || vars.USER_NAME || 'Actions Runner Unit' }}"
+      USER_EMAIL: "${{ secrets.USER_EMAIL || vars.USER_EMAIL || 'runner-no-reply@example.com' }}"
+      REPO_SERVER: "${{ secrets.REPO_SERVER || vars.REPO_SERVER || github.server_url }}"
+      REPO_OWNER: "${{ secrets.REPO_OWNER || vars.REPO_OWNER || github.repository_owner }}"
+      REPO_NAME: "${{ secrets.REPO_NAME || vars.REPO_NAME || github.repository }}"
+      REPO_COMMIT: "${{ secrets.REPO_COMMIT || vars.REPO_COMMIT || github.sha }}"
+      REPO_REFERENCE: "${{ secrets.REPO_REFERENCE || vars.REPO_REFERENCE || github.ref }}"
+    steps:
+      - name: INIT
+        id: ci_init
+        run: |
+          # Initialize Runner Establishment
+
+          ## configure git settings
+          git config --global user.email "${{ env.USER_NAME }}"
+          git config --global user.name "${{ env.USER_EMAIL }}"
+          git config --global advice.detachedHead false
+          git config --global advice.defaultBranchName false
+
+          ## fetch git repo
+          git init
+          git remote add origin "${{ env.REPO_SERVER }}/${{ env.REPO_NAME }}"
+          git fetch --depth=1 origin "${{ env.REPO_REFERENCE }}"
+          git fetch --depth=1 origin "${{ env.REPO_COMMIT }}"
+          git reset --hard FETCH_HEAD
+          git clean -fdx
+      - name: PURGE
+        id: ci_purge
+        run: |
+          # Deep-Cleaning Workspace
+
+          ./.internals/automaton/Start.sh.ps1 run Purge
+      - name: CLEAN
+        id: ci_clean
+        run: |
+          # Cleaning Workspace
+
+          ./.internals/automaton/Start.sh.ps1 run Clean
+      - name: ENVIRONMENT
+        id: ci_env
+        run: |
+          # Preparing Workspace Environment
+
+          ./.internals/automaton/Start.sh.ps1 run Environment
+      - name: SETUP
+        id: ci_setup
+        run: |
+          # Preparing Project Workspace
+
+          ./.internals/automaton/Start.sh.ps1 run Setup
+      - name: PREPARE
+        id: ci_prepare
+        run: |
+          # Preparing Project Dependencies
+
+          ./.internals/automaton/Start.sh.ps1 run Prepare
+      - name: START
+        id: ci_start
+        run: |
+          # Starting Dependency Services
+
+          ./.internals/automaton/Start.sh.ps1 run Start
+      - name: TEST
+        id: ci_test
+        run: |
+          # Testing Project Integrity
+
+          ./.internals/automaton/Start.sh.ps1 run Test
+      - name: MATERIALIZE
+        id: ci_materialize
+        run: |
+          # Fabricating Production Build for This Instance
+
+          ./.internals/automaton/Start.sh.ps1 run Materialize
+      - name: BUILD
+        id: ci_build
+        run: |
+          # Fabricating Production Build
+
+          ./.internals/automaton/Start.sh.ps1 run Build
+      - name: NOTARIZE
+        id: ci_notarize
+        run: |
+          # Notarizing Production Build
+
+          ./.internals/automaton/Start.sh.ps1 run Notarize
+      - name: PACKAGE
+        id: ci_package
+        run: |
+          # Packaging Production Build
+
+          ./.internals/automaton/Start.sh.ps1 run Package
+      - name: RELEASE
+        id: ci_release
+        run: |
+          # Releasing Packages to Stores
+
+          ./.internals/automaton/Start.sh.ps1 run Release
+      - name: STOP
+        id: ci_stop
+        run: |
+          # Stopping Dependency Services
+
+          ./.internals/automaton/Start.sh.ps1 run Stop
+      - name: DEPLOY
+        id: ci_deploy
+        run: |
+          # Deploying Production Build
+
+          ./.internals/automaton/Start.sh.ps1 run Deploy
+      - name: COMPOSE
+        id: ci_compose
+        run: |
+          # Composing Documentations
+
+          ./.internals/automaton/Start.sh.ps1 run Compose
+      - name: PUBLISH
+        id: ci_publish
+        run: |
+          # Publishing Documentations
+
+          ./.internals/automaton/Start.sh.ps1 run Publish
+      - name: ARCHIVE
+        id: ci_archive
+        if: always()
+        run: |
+          # Archive Artifact Files
+
+          ./.internals/automaton/Start.sh.ps1 run Archive

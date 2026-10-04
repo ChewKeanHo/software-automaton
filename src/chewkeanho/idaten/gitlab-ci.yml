@@ -1,0 +1,203 @@
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE =~ /^(push|trigger|web|api|schedule)$/ && $CI_COMMIT_BRANCH =~ /^(main|master|stable|next|staging|testing|experimental|edge)$/'
+
+
+stages:
+  - Production
+  - Deploy
+
+
+variables:
+  TERM: "xterm-256color"
+  RUNNERS: ""
+  USER_NAME: "Actions Runner Unit"
+  USER_EMAIL: "runner-no-reply@example.com"
+  REPO_SERVER: "$CI_SERVER_URL"
+  REPO_OWNER: "$CI_PROJECT_ROOT_NAMESPACE"
+  REPO_NAME: "$CI_PROJECT_PATH"
+  REPO_COMMIT: "$CI_COMMIT_SHA"
+  REPO_REFERENCE: "$CI_COMMIT_REF_NAME"
+
+
+pages:
+  image: debian:latest
+  stage: Deploy
+  tags:
+    - saas-linux-small-amd64 # gitLab.com shared runner
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'pages'
+  script:
+    - mkdir -p public/
+    - find . ! -name public ! -name . ! -name .git ! -name .gitlab-ci.yml -exec mv {} public/ \;
+  artifacts:
+    paths:
+      - public/
+
+
+
+
+.steps:
+  script:
+    - ./.internals/automaton/Start.sh.ps1 run Purge
+    - ./.internals/automaton/Start.sh.ps1 run Clean
+    - ./.internals/automaton/Start.sh.ps1 run Environment
+    - ./.internals/automaton/Start.sh.ps1 run Setup
+    - ./.internals/automaton/Start.sh.ps1 run Prepare
+    - ./.internals/automaton/Start.sh.ps1 run Start
+    - ./.internals/automaton/Start.sh.ps1 run Test
+    - ./.internals/automaton/Start.sh.ps1 run Materialize
+    - ./.internals/automaton/Start.sh.ps1 run Build
+    - ./.internals/automaton/Start.sh.ps1 run Notarize
+    - ./.internals/automaton/Start.sh.ps1 run Package
+    - ./.internals/automaton/Start.sh.ps1 run Release
+    - ./.internals/automaton/Start.sh.ps1 run Stop
+    - ./.internals/automaton/Start.sh.ps1 run Deploy
+    - ./.internals/automaton/Start.sh.ps1 run Compose
+    - ./.internals/automaton/Start.sh.ps1 run Publish
+  after_script:
+    - ./.internals/automaton/Start.sh.ps1 run Archive
+
+
+.linux:
+  image: debian:latest
+  stage: Production
+  before_script:
+    - apt-get update -y
+    - apt-get install -y git curl
+    - git config --global user.email "$USER_NAME"
+    - git config --global user.name "$USER_EMAIL"
+    - git config --global advice.detachedHead false
+    - git config --global advice.defaultBranchName false
+    - git checkout $REPO_COMMIT
+
+
+.macos:
+  image: macos-26-xcode-26
+  stage: Production
+  before_script:
+    - git config --global user.email "$USER_NAME"
+    - git config --global user.name "$USER_EMAIL"
+    - git config --global advice.detachedHead false
+    - git config --global advice.defaultBranchName false
+    - git checkout $REPO_COMMIT
+
+
+.windows:
+  stage: Production
+  before_script:
+    - git config --global user.email "${env:USER_NAME}"
+    - git config --global user.name "${env:USER_EMAIL}"
+    - git config --global advice.detachedHead false
+    - git config --global advice.defaultBranchName false
+    - git checkout "${env:REPO_COMMIT}"
+
+
+
+
+# ---- gitlab.com SaaS — amd64 ----
+runner-saas-linux-small-amd64:
+  extends: [.linux, .steps]
+  tags: [saas-linux-small-amd64]
+  rules:
+    - if: '$RUNNERS =~ /saas-linux-small-amd64/ && $CI_COMMIT_BRANCH != "pages"'
+
+runner-saas-linux-medium-amd64:
+  extends: [.linux, .steps]
+  tags: [saas-linux-medium-amd64]
+  rules:
+    - if: '$RUNNERS =~ /saas-linux-medium-amd64/ && $CI_COMMIT_BRANCH != "pages"'
+
+runner-saas-linux-large-amd64:
+  extends: [.linux, .steps]
+  tags: [saas-linux-large-amd64]
+  rules:
+    - if: '$RUNNERS =~ /saas-linux-large-amd64/ && $CI_COMMIT_BRANCH != "pages"'
+
+runner-saas-linux-xlarge-amd64:
+  extends: [.linux, .steps]
+  tags: [saas-linux-xlarge-amd64]
+  rules:
+    - if: '$RUNNERS =~ /saas-linux-xlarge-amd64/ && $CI_COMMIT_BRANCH != "pages"'
+
+runner-saas-linux-2xlarge-amd64:
+  extends: [.linux, .steps]
+  tags: [saas-linux-2xlarge-amd64]
+  rules:
+    - if: '$RUNNERS =~ /saas-linux-2xlarge-amd64/ && $CI_COMMIT_BRANCH != "pages"'
+
+# ---- gitlab.com SaaS — arm64 ----
+runner-saas-linux-small-arm64:
+  extends: [.linux, .steps]
+  tags: [saas-linux-small-arm64]
+  rules:
+    - if: '$RUNNERS =~ /saas-linux-small-arm64/ && $CI_COMMIT_BRANCH != "pages"'
+
+runner-saas-linux-medium-arm64:
+  extends: [.linux, .steps]
+  tags: [saas-linux-medium-arm64]
+  rules:
+    - if: '$RUNNERS =~ /saas-linux-medium-arm64/ && $CI_COMMIT_BRANCH != "pages"'
+
+runner-saas-linux-large-arm64:
+  extends: [.linux, .steps]
+  tags: [saas-linux-large-arm64]
+  rules:
+    - if: '$RUNNERS =~ /saas-linux-large-arm64/ && $CI_COMMIT_BRANCH != "pages"'
+
+# ---- gitlab.com SaaS — macOS ----
+runner-saas-macos-medium-m1:
+  extends: [.macos, .steps]
+  tags: [saas-macos-medium-m1]
+  rules:
+    - if: '$RUNNERS =~ /saas-macos-medium-m1/ && $CI_COMMIT_BRANCH != "pages"'
+
+runner-saas-macos-large-m2pro:
+  extends: [.macos, .steps]
+  tags: [saas-macos-large-m2pro]
+  rules:
+    - if: '$RUNNERS =~ /saas-macos-large-m2pro/ && $CI_COMMIT_BRANCH != "pages"'
+
+# ---- gitlab.com SaaS — Windows ----
+runner-saas-windows-medium-amd64:
+  extends: [.windows, .steps]
+  tags: [saas-windows-medium-amd64]
+  rules:
+    - if: '$RUNNERS =~ /saas-windows-medium-amd64/ && $CI_COMMIT_BRANCH != "pages"'
+
+# ---- self-hosted only (no SaaS runner carries these tags) ----
+runner-linux-amd64:
+  extends: [.linux, .steps]
+  tags: [linux-amd64]
+  rules:
+    - if: '$RUNNERS =~ /linux-amd64/ && $CI_COMMIT_BRANCH != "pages"'
+
+runner-linux-arm64:
+  extends: [.linux, .steps]
+  tags: [linux-arm64]
+  rules:
+    - if: '$RUNNERS =~ /linux-arm64/ && $CI_COMMIT_BRANCH != "pages"'
+
+runner-darwin-amd64:
+  extends: [.macos, .steps]
+  tags: [darwin-amd64]
+  rules:
+    - if: '$RUNNERS =~ /darwin-amd64/ && $CI_COMMIT_BRANCH != "pages"'
+
+runner-darwin-arm64:
+  extends: [.macos, .steps]
+  tags: [darwin-arm64]
+  rules:
+    - if: '$RUNNERS =~ /darwin-arm64/ && $CI_COMMIT_BRANCH != "pages"'
+
+runner-windows-amd64:
+  extends: [.windows, .steps]
+  tags: [windows-amd64]
+  rules:
+    - if: '$RUNNERS =~ /windows-amd64/ && $CI_COMMIT_BRANCH != "pages"'
+
+runner-windows-arm64:
+  extends: [.windows, .steps]
+  tags: [windows-arm64]
+  rules:
+    - if: '$RUNNERS =~ /windows-arm64/ && $CI_COMMIT_BRANCH != "pages"'

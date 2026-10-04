@@ -110,6 +110,7 @@ To use `(Holloway) Chew, Kean Ho's Automaton` in your next project, the best
 practices for installing, uninstalling, and updating are as follows:
 
 
+
 ### Download the Latest Version
 
 To counter (nuisance) geopolitical threats, you can download the latest version
@@ -129,6 +130,30 @@ of `(Holloway) Chew, Kean Ho's Automaton` from the following mirror:
    1. Note that although the packages are organized by operating systems, they
       are actually the same content. The packages are mainly for system
       compatibility purposes only.
+
+
+
+### Verify Content Integrity
+
+You should also download:
+
+1. its GPG/PGP cryptographically signed certificate; AND
+2. the public key
+
+for cryptographically verify the package is healthy and
+**IS GENUINELY FROM THE ORIGIN**. The command is to verify is as follows:
+
+```
+$ gpg --no-default-keyring --keyring /path/to/public-key.gpg --verify /path/to/file.asc
+```
+
+For GnuPG software, you can source it from
+[GnuPG official website](https://gnupg.org).
+
+Should GnuPG functioned healthy, it means everything is good. Otherwise, the
+package is tainted and you **MUST** remove it at all cost. Try download from
+another mirror and restart the content integrity verification again.
+
 
 
 ### Unpack The Payload
@@ -373,53 +398,6 @@ directory.
 If you wish to uninstall it, simply walk backwards through this guide.
 
 Enjoy!
-
-
-
-
-## Verifying Content Integrity
-
-
-To secure the content from unauthorized modification by anyone down to bit-level
-(`0|1`), they are cryptographically signed using one or more cryptography tools
-such as but not limited to:
-
-* [GnuPG](https://gnupg.org); AND/OR
-* [OpenSSL](https://www.openssl.org/).
-
-The public key and the associated certificate are attached. Only the main owner
-keeps and maintains the private keys. To verify the content's integrity:
-
-
-
-### GnuPG
-
-1. Install [GnuPG](https://gnupg.org) software if not present.
-2. Download the target file and its detached signature file (the `.asc` file
-   with the same filename).
-3. Download the public key file (`.gpg`).
-4. Place them next to each other in the directory.
-5. Open a terminal and execute the following command:
-
-```
-$ gpg --no-default-keyring --keyring /path/to/public.gpg --verify /path/to/file.asc
-```
-
-
-
-### OpenSSL
-
-1. Install [OpenSSL](https://www.openssl.org) software if not present.
-2. Download the target file and its detached signature file (the `.sig`/`.sign`
-   file with the same filename).
-3. Download the public certificate file (`.pem`) containing the public key
-   within.
-4. Place them next to each other in the directory.
-5. Open a terminal and execute the following command:
-
-```
-$ openssl dgst -verify /path/to/pubkey.pem -signature /path/to/file.sig /path/to/file
-```
 
 
 

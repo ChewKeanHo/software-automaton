@@ -9,6 +9,39 @@ baseline that simplifies management for all parties.
 
 
 
+## Repository's Source Structure
+
+[![banner](/.internals/trademarks/banner_1200x100.svg)](#)
+
+The repository's source structure is as follows:
+
+1. **`.internals/automaton/`** - the actual source codes location for
+   development.
+2. **`.local/sbin/`** - the repository's automation tool.
+3. **`src/chewkeanho/idaten`** - the exported source materials.
+4. **`share/doc/chewkeanho/idaten`** - the exported documentation materials.
+
+After cloning the repository from remote, you need to update your local
+repository's `.git/config` with the following push URLs:
+
+```
+[remote "origin"]
+        url = git@github.com:ChewKeanHo/software-automaton.git
+        pushurl = git@github.com:ChewKeanHo/software-automaton.git
+        pushurl = ssh://git@codeberg.org/chewkeanho/software-automaton.git
+        pushurl = git@gitlab.com:chewkeanho/software-automaton.git
+        fetch = +refs/heads/*:refs/remotes/origin/*
+[branch "main"]
+        remote = origin
+        merge = refs/heads/main
+```
+
+We support GitHub.com, Codeberg.org (including Forgejo), and GitLab.com as our
+primary adapters.
+
+
+
+
 ## GNU Privacy Guard (`GnuPG`|`GPG`|`PGP`) and OpenSSL
 
 [![banner](/.internals/trademarks/banner_1200x100.svg)](#)
