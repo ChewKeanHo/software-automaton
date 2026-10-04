@@ -398,9 +398,26 @@ Once they are in place, commit and make a test run! If everything works out
 fine, you should only be working on growing your `.internals/ci/jobs/`
 directory.
 
-If you wish to uninstall it, simply walk backwards through this guide.
-
 Enjoy!
+
+
+#### Selecting PowerShell or POSIX Shell
+
+To select between PowerShell and POSIX Shell, simply use the corresponding
+technology to execute the run. For examples:
+
+```
+# POSIX Shell with /bin/sh
+$ bin/sh .internals/automaton/Start.sh.ps1 run [JOB]
+
+# PowerShell
+$ bin/pwsh .internals/automaton/Start.sh.ps1 run [JOB]
+```
+
+
+#### To Uninstall
+
+If you wish to uninstall it, simply walk backwards through this guide.
 
 
 
