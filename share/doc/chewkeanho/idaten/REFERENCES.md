@@ -24,9 +24,9 @@ Below are the references used in this project repository:
 1. KEAN HO, CHEW; 2023; "AutomataCI"; *Software*; GitHub.com via GitHub Inc.;
    ; Sans Francisco, United States of America; Viewed on 2026-10-01;
    Available at: https://github.com/ChewKeanHo/software-automataci
-2. KEAN HO, CHEW; "The Polyglot Scripts – A universal runtime contract between
-   the human and any machine in the past, present, and future."; Version:
-   v2.0.1; 1st Edition; Series: v2.0.1; Volume: 1;
+2. KEAN HO, CHEW; 2026; "The Polyglot Scripts – A universal runtime contract
+   between the human and any machine in the past, present, and future.";
+   Version: v2.0.1; 1st Edition; Series: v2.0.1; Volume: 1;
    SKU: chewkeanho-research-the-polyglot-scripts;
    UUID: 7B000A8B-1564-465F-AF48-6FB0A2F0547E; CERN EU, Open AIRE, and European
    Commission via Zenodo.org; Malaysia, South East Asia; Accessed on 2026-10-01;

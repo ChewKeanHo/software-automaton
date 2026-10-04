@@ -2,12 +2,12 @@ cff-version: "1.2.0"
 type: "software"
 date-released: "2026-10-04"
 title: "(Holloway) Chew, Kean Ho's Automaton"
-version: "0.0.1"
+version: "1.0.0"
 license: "0BSD"
 repository: "https://github.com/ChewKeanHo/software-automaton"
 repository-code: "https://github.com/ChewKeanHo/software-automaton"
 repository-artifact: "https://github.com/ChewKeanHo/software-automaton"
-url: "https://github.com/ChewKeanHo/software-automaton"
+url: "https://doi.org/10.5281/zenodo.23129070"
 contact:
   - affiliation: "(Holloway) Chew, Kean Ho"
     given-names: "Kean Ho"
@@ -18,10 +18,10 @@ abstract: |-
   ***Automate Reliably. Scale Confidently.***
 
   `Automaton` is `(Holloway) Chew, Kean Ho`'s production-grade automation
-  toolchain that unifies your CI jobs across platforms using plain shell and
-  PowerShell scripts, bootstrapped by a single polyglot script. This includes
-  manual human intervention where one can debug the processes at will without
-  affecting the CI pipelines.
+  toolchain that unifies your CI jobs across platforms using **ONLY** plain
+  shell and PowerShell scripts bootstrapped by a single polyglot script. This
+  includes manual human intervention capability where one can debug the
+  processes at will without affecting the CI pipelines.
 
   It solves the following business problems:
 
@@ -30,8 +30,8 @@ abstract: |-
     console. Hence, they outlive any single vendor's pricing or roadmap changes.
   * **Zero Runtime Dependencies** - It just works! Automaton boots with what
     each OS already ships: a POSIX shell on Linux/macOS, PowerShell on Windows.
-    Nothing to install before first use. In fact, use Automaton to install
-    the tools and set up the environment instead!
+    Nothing to install before first use. In fact, use Automaton to install the
+    tools and set up the environment instead!
   * **Manual Intervention Capable** - Test any CI job on your own laptop before
     it touches CI: no more silly, noisy "fix CI" commits.
   * **Full Downstream Freedom** - It merely streamlines all triggers into your
@@ -56,6 +56,9 @@ identifiers:
   - type: other
     value: "chewkeanho-software-automaton"
     description: "Product SKU Identifier"
+  - type: doi
+    value: "10.5281/zenodo.23129070"
+    description: "(General) DOI Identifier"
   - type: other
     value: "77EFA9DB-18A0-4279-A885-BBB5769A116B"
     description: "Product UUID Identifier"

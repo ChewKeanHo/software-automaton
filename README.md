@@ -123,9 +123,9 @@ of `(Holloway) Chew, Kean Ho's Automaton` from the following mirror:
 | Global              | https://github.com/ChewKeanHo/software-automaton/releases   |
 | Global              | https://codeberg.org/chewkeanho/software-automaton/releases |
 | US (United States)  | https://github.com/ChewKeanHo/software-automaton/releases   |
-| US (United States)  | COMING SOON                                                 |
+| US (United States)  | https://gitlab.com/chewkeanho/software-automaton/-/releases |
 | EU (European Union) | https://codeberg.org/chewkeanho/software-automaton/releases |
-| EU (European Union) | COMING SOON                                                 |
+| EU (European Union) | https://doi.org/10.5281/zenodo.23129070                     |
 
 1. You should download based on your extraction tool in your operating system
    such as but not limited to `tar`, `untar`, `gz`, `xz`, `zip`, or `unzip`.
@@ -178,7 +178,8 @@ your_project/
           +-- automaton/            <-- place or overwrite automaton/ here
 ```
 
-That is how you add `(Holloway) Chew, Kean Ho's Automaton` into your project.
+That is how you add|update `(Holloway) Chew, Kean Ho's Automaton` into your
+project.
 
 > [!NOTE]
 >
@@ -473,6 +474,7 @@ Creators: (Holloway) Chew, Kean Ho
 Contact: hello@chewkeanho.com
 SKU: chewkeanho-software-automaton
 UUID: 77EFA9DB-18A0-4279-A885-BBB5769A116B
+DOI: 10.5281/zenodo.23129070
 License: BSD Zero Clause License (https://opensource.org/licenses/0BSD)
 Repository Made On: 2026-09-09
 Repository Made From: Malaysia, South East Asia
