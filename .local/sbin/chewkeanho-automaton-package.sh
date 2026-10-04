@@ -230,6 +230,24 @@ done
 
 
 
+# export public key
+	1>&2 printf -- "%s" "\
+
+I: Exporting GPG Public Key to '${PROJECT_DIRECTORY_PKG}/public-key.gpg'...
+"
+gpg --export 49B7878749107ED9C456267ACFD3316C29873FB5 \
+	> "${PROJECT_DIRECTORY_PKG}/public-key.gpg"
+if [ $? -ne 0 ]; then
+		1>&2 printf -- "%s" "\
+E: Failed To Export GPG Public Key to: ${PROJECT_DIRECTORY_PKG}/public-key.gpg
+E: Unable to Proceed.
+E: Bailing Out...
+
+"
+fi
+
+
+
 # clean up
 1>&2 printf -- "%s" "\
 
