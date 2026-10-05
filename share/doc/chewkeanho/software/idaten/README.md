@@ -69,14 +69,14 @@ The sequence of actions are as follows:
 
 ```
 trigger
-  |
-  ▼
+   |
+   ▼
 .internals/automaton/Start.sh.ps1
-  |
-  ▼
+   |
+   ▼
 .internals/automaton/presenters/init.{sh,ps1}
-  |
-  ▼
+   |
+   ▼
 .internals/ci/jobs/[JOB]/start.{sh,ps1}
 ```
 
@@ -135,24 +135,53 @@ of `(Holloway) Chew, Kean Ho's Automaton` from the following mirror:
 
 ### Verify Content Integrity
 
-You should also download:
+You should also download the following from the same portal:
 
-1. its GPG/PGP cryptographically signed certificate; AND
-2. the public key
+1. the package's GPG/PGP detached signature (the associated `.asc`); AND
+2. the signing public key (`public-key.gpg`)
 
-for cryptographically verify the package is healthy and
-**IS GENUINELY FROM THE ORIGIN**. The command is to verify is as follows:
 
-```
-$ gpg --no-default-keyring --keyring /path/to/public-key.gpg --verify /path/to/file.asc
-```
+#### Download and Install GnuPG
 
 For GnuPG software, you can source it from
-[GnuPG official website](https://gnupg.org).
+[GnuPG official website](https://gnupg.org). Follow the instructions therein
+to properly install it.
 
-Should GnuPG functioned healthy, it means everything is good. Otherwise, the
-package is tainted and you **MUST** remove it at all cost. Try download from
-another mirror and restart the content integrity verification again.
+
+#### Confirming Key Origin
+
+The command to display the key's fingerprint is:
+
+```
+$ gpg --no-default-keyring --fingerprint --show-keys /path/to/public-key.gpg
+```
+
+Then look for:
+
+```
+pub   ed25519 2020-01-13 [C]
+      49B7 8787 4910 7ED9 C456  267A CFD3 316C 2987 3FB5
+```
+
+If it matches, that means the public key is indeed from the origin owner itself.
+
+Otherwise, treat this as a sign of tampering: switch to a new mirror and restart
+the verification again.
+
+
+#### Verify the Package Integrity
+
+To verify the package integrity, the command is as follows:
+
+```
+$ gpg --no-default-keyring --keyring /path/to/public-key.gpg --verify [PACKAGE].asc [PACKAGE]
+```
+
+If GnuPG reports a good signature, everything is good.
+
+Otherwise, the package is tainted and you **MUST** remove it at all cost. Try
+downloading from another mirror and restart the content integrity verification
+again.
 
 
 
@@ -160,7 +189,7 @@ another mirror and restart the content integrity verification again.
 
 Once done, unpack the payload in your local computer.
 
-for `.tar.gz` and `.tar.xz`:
+For `.tar.gz` and `.tar.xz`:
 
 ```
 $ tar -xvf chewkeanho_automaton_[VERSION]_[OS]_[ARCH].tar.[COMPRESSION] -C /path/to/directory
@@ -172,7 +201,7 @@ Example (for 1.0.0, freebsd, all, xz):
 $ tar -xvf chewkeanho_automaton_1.0.0_freebsd_all.tar.xz -C /path/to/directory
 ```
 
-for `.zip`:
+For `.zip`:
 
 ```
 $ unzip -d /path/to/directory chewkeanho_automaton_[VERSION]_[OS]_[ARCH].zip
@@ -215,7 +244,7 @@ cd your_project
 $ chmod +x ./.internals/automaton/Start.sh.ps1
 ```
 
-Then run `help` command from it:
+Then run the `help` command from it:
 
 ```
 $ ./.internals/automaton/Start.sh.ps1 help
@@ -405,11 +434,25 @@ technology to execute the run. For examples:
 
 ```
 # POSIX Shell with /bin/sh
-$ bin/sh .internals/automaton/Start.sh.ps1 run [JOB]
+$ /bin/sh .internals/automaton/Start.sh.ps1 run [JOB]
 
-# PowerShell
-$ bin/pwsh .internals/automaton/Start.sh.ps1 run [JOB]
+# PowerShell (Linux/MacOS)
+$ pwsh .internals/automaton/Start.sh.ps1 run [JOB]
+
+# PowerShell (Microsoft Windows)
+PS> powershell -ExecutionPolicy RemoteSigned -File .internals\automaton\Start.sh.ps1 run [JOB]
 ```
+
+> [!IMPORTANT]
+>
+> If the package was extracted using File Explorer, PowerShell under
+> `RemoteSigned` will refuse to run the scripts ("not digitally signed").
+>
+> You can fix without touching any execution policy: unblock the archive before
+> extracting (right-click > Properties > Unblock), or run inside the
+> extracted directory:
+>
+> PS> Get-ChildItem -Recurse | Unblock-File
 
 
 #### To Uninstall
@@ -432,7 +475,7 @@ use of Artificial Intelligence.
 
 
 Please refer to [CONTRIBUTING.md](CONTRIBUTING.md) for contributing &
-maintenances guidelines.
+maintenance guidelines.
 
 
 
