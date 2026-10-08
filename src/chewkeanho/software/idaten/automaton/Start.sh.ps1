@@ -91,7 +91,7 @@ echo \" <<'RUN_AS_POWERSHELL' >/dev/null # " | Out-Null
 
 # configure
 ${____init_file} = "init.ps1"
-${____init_directory} ="lib\namespace"
+${____init_directory} ="automaton\presenters"
 
 ${____init_package_name} = "My App"
 
@@ -100,10 +100,10 @@ ${____init_package_name} = "My App"
 
 # scan
 # Current directory - user-customized application
-${env:AUTOMATON_DIRECTORY} = "$(Get-Location)\.internals\automaton\presenters\${____init_file}"
+${env:AUTOMATON_DIRECTORY} = "$(Get-Location)\.internals\${____init_directory}\${____init_file}"
 if (-not (Test-Path ${env:AUTOMATON_DIRECTORY})) {
         # Native User Rootless Software Directory
-        ${env:AUTOMATON_DIRECTORY} = "$(Get-Location)\automaton\presenters\${____init_file}"
+        ${env:AUTOMATON_DIRECTORY} = "$(Get-Location)\${____init_directory}\${____init_file}"
 }
 
 if (-not (Test-Path ${env:AUTOMATON_DIRECTORY})) {
@@ -182,7 +182,7 @@ RUN_AS_POWERSHELL
 ################################################################################
 # configure
 ____init_file="init.sh"
-____init_directory="lib/namespace"
+____init_directory="automaton/presenters"
 
 ____init_package_name="My App"
 
@@ -194,9 +194,9 @@ ____init_macos_directory="namespace"
 
 # scan
 # Native User Current Directory - User-Customized Application
-AUTOMATON_DIRECTORY="${PWD%/}/.internals/automaton/presenters/${____init_file}"
+AUTOMATON_DIRECTORY="${PWD%/}/.internals/${____init_directory}/${____init_file}"
 if [ ! -f "$AUTOMATON_DIRECTORY" ]; then
-        AUTOMATON_DIRECTORY="${PWD%/}/automaton/presenters/${____init_file}"
+        AUTOMATON_DIRECTORY="${PWD%/}/${____init_directory}/${____init_file}"
 fi
 
 if [ ! -f "$AUTOMATON_DIRECTORY" ]; then

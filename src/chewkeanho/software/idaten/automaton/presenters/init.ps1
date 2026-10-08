@@ -21,7 +21,7 @@
 # DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN
 # AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT
 # OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-${env:AUTOMATON_VERSION} = "1.0.1"
+${env:AUTOMATON_VERSION} = "1.1.0"
 
 
 
@@ -294,15 +294,12 @@ switch -CaseSensitive ("$($args[0])") {
 			$global:LASTEXITCODE = $LASTEXITCODE
 			return
 		}
-
-		$null = AUTOMATON_Print_Error @"
-'$($args[1])' = '${____job_location}\$($args[1])\start.ps1' => ???
-
-
-
-
-"@ ${env:AUTOMATON_COLOR_MODE}
 	}
+	$null = AUTOMATON_Print_Error @"
+'$($args[1])' = '${____job_location}\$($args[1])\start.ps1' => ???
+"@ ${env:AUTOMATON_COLOR_MODE}
+	$global:LASTEXITCODE = 1
+	return
 } { $_ -in "-h", "help", "Help", "HELP" } {
 } "version" {
 	Write-Output ${env:AUTOMATON_VERSION}
@@ -311,11 +308,9 @@ switch -CaseSensitive ("$($args[0])") {
 } default {
 	$null = AUTOMATON_Print_Error @"
 '$($args[0])' => ???
-
-
-
-
 "@ ${env:AUTOMATON_COLOR_MODE}
+	$global:LASTEXITCODE = 1
+	return
 }}
 
 
