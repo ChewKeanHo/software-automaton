@@ -320,15 +320,12 @@ run)
 			})
 			return $?
 		fi
-
-		AUTOMATON_Print_Error "\
-'${2:-}' = '${____job_location}/${2:-}/start.sh' => ???
-
-
-
-
-" "$AUTOMATON_COLOR_MODE"
 	fi
+
+	AUTOMATON_Print_Error "\
+'${2:-}' = '${____job_location}/${2:-}/start.sh' => ???
+" "$AUTOMATON_COLOR_MODE"
+	return 1
 	;;
 -h|help|Help|HELP)
 	;;
@@ -339,11 +336,8 @@ version)
 *)
 		AUTOMATON_Print_Error "\
 '${1:-}' => ???
-
-
-
-
 " "$AUTOMATON_COLOR_MODE"
+	return 1
 	;;
 esac
 
