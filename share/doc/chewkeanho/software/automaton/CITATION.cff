@@ -34,17 +34,17 @@ abstract: |-
     tools and set up the environment instead!
   * **Manual Intervention Capable** - Test any CI job on your own laptop before
     it touches CI: no more silly, noisy "fix CI" commits.
-  * **Full Downstream Freedom** - It merely streamlines all triggers into your
-    CI shell scripts. You develop your own processes therein with absolute
-    freedom!
+  * **Full Downstream Freedom** - It merely channels all triggers into your CI
+    shell scripts. You develop your own processes therein with absolute freedom!
   * **Lightweight to Install** - Just unpack a few shell and PowerShell scripts.
     No complicated installer. No unused bloat.
   * **Tested Across Platforms** - GitHub.com, GitLab.com, Codeberg.org,
     self-hosted Forgejo, etc. This project tests on them whenever runners are
     available.
   * **Learnt From The Past** - 2nd generation development based on learning from
-    its predecessor: the
-    [`(Holloway) Chew, Kean Ho's AutomataCI`](https://github.com/ChewKeanHo/software-automataci).
+    its predecessor: the [`(Holloway) Chew, Kean Ho's AutomataCI`](https://github.com/ChewKeanHo/software-automataci).
+  * **100% Predictable Reproducibility** - No artificial intelligence (A.I.)
+    shenanigans; just human-made predictable reproducible functionalities.
 message: |-
   Please cite and reference this repository accordingly.
 authors:

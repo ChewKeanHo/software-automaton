@@ -25,9 +25,8 @@ It solves the following business problems:
   set up the environment instead!
 * **Manual Intervention Capable** - Test any CI job on your own laptop before
   it touches CI: no more silly, noisy "fix CI" commits.
-* **Full Downstream Freedom** - It merely streamlines all triggers into your
-  CI shell scripts. You develop your own processes therein with absolute
-  freedom!
+* **Full Downstream Freedom** - It merely channels all triggers into your CI
+  shell scripts. You develop your own processes therein with absolute freedom!
 * **Lightweight to Install** - Just unpack a few shell and PowerShell scripts.
   No complicated installer. No unused bloat.
 * **Tested Across Platforms** - GitHub.com, GitLab.com, Codeberg.org,
@@ -35,6 +34,8 @@ It solves the following business problems:
   available.
 * **Learnt From The Past** - 2nd generation development based on learning from
   its predecessor: the [`(Holloway) Chew, Kean Ho's AutomataCI`](https://github.com/ChewKeanHo/software-automataci).
+* **100% Predictable Reproducibility** - No artificial intelligence (A.I.)
+  shenanigans; just human-made predictable reproducible functionalities.
 
 
 
@@ -80,7 +81,7 @@ trigger
 .internals/ci/jobs/[JOB]/start.{sh,ps1}
 ```
 
-1. A human, robot, or schedule triggers the repository's CI pipeline.
+1. A human, robot, or schedule **triggers** the repository's CI pipeline.
 2. Every trigger calls the `.internals/automaton/Start.sh.ps1` polyglot script.
 3. The polyglot script natively identifies the shell type and locates the
    project's init shell or PowerShell script (defaulting to
@@ -90,15 +91,16 @@ trigger
    variable.
 5. Automaton searches for the job's start script (default:
    `.internals/ci/jobs/[JOB]/start.{sh,ps1}`).
-6. Automaton source-imports (a.k.a. 'dot-imports') the CI job start script and
-   hands full control over.
+6. Automaton source-imports (a.k.a. `dot-imports`) the CI job start script and
+   hands the full control over.
 
 That is all. It is now this simple compared to its predecessor. You get the full
 freedom to develop your own process freely in the job's start scripts.
 
-Due to this nature, a human can intervene in the automation process at any step
+Due to this design, a human can intervene in the automation process at any step
 for localized process debugging and testing. Hence, one can test any job within
-the laptop and computer before it touches actual CI pipelines.
+the laptop and computer before it touches the actual continuously improved
+automation pipelines.
 
 
 
