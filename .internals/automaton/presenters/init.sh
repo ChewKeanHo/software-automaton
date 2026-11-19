@@ -154,6 +154,10 @@ license)
 	. "${AUTOMATON_DIRECTORY_ROOT}/presenters/license/start.sh"
 	return 0
 	;;
+list)
+	. "${AUTOMATON_DIRECTORY_ROOT}/presenters/list/start.sh"
+	return 0
+	;;
 run)
 	. "${AUTOMATON_DIRECTORY_ROOT}/presenters/run/start.sh"
 	return 0

@@ -168,6 +168,10 @@ switch -CaseSensitive ($args[0]) {
 	. "${env:AUTOMATON_DIRECTORY_ROOT}\presenters\license\start.ps1" @args
 	$global:LASTEXITCODE = 0
 	return
+} "list" {
+	. "${env:AUTOMATON_DIRECTORY_ROOT}\presenters\list\start.ps1" @args
+	$global:LASTEXITCODE = 0
+	return
 } "run" {
 	. "${env:AUTOMATON_DIRECTORY_ROOT}\presenters\run\start.ps1" @args
 	$global:LASTEXITCODE = 0

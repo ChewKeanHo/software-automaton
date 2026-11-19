@@ -25,6 +25,7 @@ _________________________________________________________________________
 $ chewkeanho-automaton license
 $ chewkeanho-automaton help
 $ chewkeanho-automaton help license
+$ chewkeanho-automaton help list
 $ chewkeanho-automaton help run
 $ chewkeanho-automaton help version
 $ chewkeanho-automaton run [JOB]
