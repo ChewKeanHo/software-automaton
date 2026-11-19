@@ -31,6 +31,10 @@ license)
 	. "${AUTOMATON_DIRECTORY_ROOT}/presenters/help/license/start.sh"
 	return $?
 	;;
+run)
+	. "${AUTOMATON_DIRECTORY_ROOT}/presenters/help/run/start.sh"
+	return $?
+	;;
 version)
 	. "${AUTOMATON_DIRECTORY_ROOT}/presenters/help/version/start.sh"
 	return $?
