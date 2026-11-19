@@ -21,151 +21,6 @@
 # DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN
 # AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT
 # OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-${env:AUTOMATON_VERSION} = "1.1.0"
-
-
-
-
-# import libraries
-function AUTOMATON_Print_Error {
-	param (
-		[string]$____content,
-		[string]$____color
-	)
-
-	## !!! IMPORTANT NOTICE !!!
-	## The variable names here are intentionally misspelled for avoiding
-	## unwanted naming collision.
-
-
-	# validate inputs
-	$_____runtime_x_retnirp_color = $false
-	switch -Regex ($____color) {
-	'^$' {
-		break
-	} '[^0-9]' {
-		break
-	} default {
-		if ([int]$____color -ge 8) {
-			$_____runtime_x_retnirp_color = $true
-		}
-	}}
-
-
-	# execute
-	foreach (
-		$_____runtime_x_retnirp_line in `
-			$($____content -replace '\n$', '' -split '\r?\n')
-	) {
-		if ($_____runtime_x_retnirp_color -eq $true) {
-			$null = Write-Host -ForegroundColor red @"
-E: ${_____runtime_x_retnirp_line}
-"@
-		} else {
-			$null = Write-Host @"
-E: ${_____runtime_x_retnirp_line}
-"@
-		}
-	}
-
-
-	# report status
-	return 0
-}
-
-
-function AUTOMATON_Print_Info {
-	param (
-		[string]$____content,
-		[string]$____color
-	)
-
-
-	## !!! IMPORTANT NOTICE !!!
-	## The variable names here are intentionally misspelled for avoiding
-	## unwanted naming collision.
-
-
-	# validate inputs
-	$_____runtime_x_retnirp_color = $false
-	switch -Regex ($____color) {
-	'^$' {
-		break
-	} '[^0-9]' {
-		break
-	} default {
-		if ([int]$____color -ge 8) {
-			$_____runtime_x_retnirp_color = $true
-		}
-	}}
-
-
-	# execute
-	foreach (
-		$_____runtime_x_retnirp_line in `
-			$($____content -replace '\n$', '' -split '\r?\n')
-	) {
-		if ($_____runtime_x_retnirp_color -eq $true) {
-			$null = Write-Host -ForegroundColor cyan @"
-I: ${_____runtime_x_retnirp_line}
-"@
-		} else {
-			$null = Write-Host @"
-I: ${_____runtime_x_retnirp_line}
-"@
-		}
-	}
-
-
-	# report status
-	return 0
-}
-
-
-function AUTOMATON_Read_Terminal_Color_Mode {
-	# execute
-	## try parse from $COLORTERM environment variable.
-	if (${env:COLORTERM} -in 'truecolor', '24bit', '24-bit') {
-		return '24'
-	}
-
-	## try prse from WT_SESSION environment variable.
-	if (-not [string]::IsNullOrEmpty(${env:WT_SESSION})) {
-		return '24'
-	}
-
-	## try parse from VS code integrated terminal.
-	if (${env:ConEmuANSI} -eq "ON") {
-		return '24'
-	}
-
-	## try prase from ANSI shim for legacy console.
-	if (-not [string]::IsNullOrEmpty(${env:ANSICON})) {
-		return '4'
-	}
-
-	## try parse from $TERM environment variable.
-	switch -Regex (${env:TERM}) {
-	'24bit|truecolor|direct' {
-		return '24'
-	} '256color' {
-		return '8'
-	} 'dumb' {
-		return '1'
-	} default {
-		return '1'
-	}}
-
-
-	# report status
-	return 0
-}
-
-
-
-
-# configure console colors
-${env:AUTOMATON_COLOR_MODE} = AUTOMATON_Read_Terminal_Color_Mode
 
 
 
@@ -177,27 +32,85 @@ ${env:AUTOMATON_COLOR_MODE} = AUTOMATON_Read_Terminal_Color_Mode
 # If it is unset, this means the script is operating using invalid method to
 # initialize so it **MUST** be failed at all time.
 if ([string]::IsNullOrEmpty(${env:AUTOMATON_DIRECTORY})) {
-	$null = AUTOMATON_Print_Error  @"
-'`$AUTOMATON_DIRECTORY' -> ?!?!  <- Dev!!!
+	$null = Write-Host @"
+E: '`$AUTOMATON_DIRECTORY' -> ?!?!  <- Dev!!!
 
-"@ ${env:AUTOMATON_COLOR_MODE}
+"@
 	$global:LASTEXITCODE = 1
 	return
 } elseif (-not (${env:AUTOMATON_DIRECTORY} -match "init\.ps1$")) {
-	$null = AUTOMATON_Print_Error  @"
+	$null = Write-Host @"
 '`$AUTOMATON_DIRECTORY' -> ?!?!  <- Dev!!!
 
-"@ ${env:AUTOMATON_COLOR_MODE}
+"@
 	$global:LASTEXITCODE = 1
 	return
 } elseif (-not (Test-Path -PathType Leaf -LiteralPath ${env:AUTOMATON_DIRECTORY})) {
-	$null = AUTOMATON_Print_Error  @"
+	$null = Write-Host @"
 '`$AUTOMATON_DIRECTORY' -> ?!?!  <- Dev!!!
 
-"@ ${env:AUTOMATON_COLOR_MODE}
+"@
 	$global:LASTEXITCODE = 1
 	return
 }
+
+
+
+
+# locate the AUTOMATON_DIRECTORY_ROOT App directory
+${env:AUTOMATON_DIRECTORY_ROOT} = ${env:AUTOMATON_DIRECTORY} -replace 'init\.ps1$'
+${env:AUTOMATON_DIRECTORY_ROOT} = ${env:AUTOMATON_DIRECTORY_ROOT} -replace '\\$'
+${env:AUTOMATON_DIRECTORY_ROOT} = ${env:AUTOMATON_DIRECTORY_ROOT} -replace 'presenters$'
+${env:AUTOMATON_DIRECTORY_ROOT} = ${env:AUTOMATON_DIRECTORY_ROOT} -replace '\\$'
+
+
+
+
+# import libraries
+if (-not (Test-Path -PathType Leaf `
+	-LiteralPath "${env:AUTOMATON_DIRECTORY_ROOT}\interactors\libraries\runtimes\load_modules.ps1" `
+)) {
+	$null = Write-Host @"
+E: 'runtimes\load_modules' -> ?!?!  <- Dev!!!
+
+"@
+	$global:LASTEXITCODE = 1
+	return
+}
+
+
+$null = . "${env:AUTOMATON_DIRECTORY_ROOT}\interactors\libraries\runtimes\load_modules.ps1"
+if (-not (Get-Command AUTOMATON_interactors_libraries_runtimes_load_modules `
+		 -errorAction SilentlyContinue `
+)) {
+	$null = Write-Host @"
+E: 'AUTOMATON_interactors_libraries_runtimes_load_modules' -> ?!?!  <- Dev!!!
+
+"@
+	$global:LASTEXITCODE = 1
+	return
+}
+
+$null = . AUTOMATON_interactors_libraries_runtimes_load_modules `
+	"${env:AUTOMATON_DIRECTORY_ROOT}\entities"
+$null = . AUTOMATON_interactors_libraries_runtimes_load_modules `
+	"${env:AUTOMATON_DIRECTORY_ROOT}\views"
+$null = . AUTOMATON_interactors_libraries_runtimes_load_modules `
+	"${env:AUTOMATON_DIRECTORY_ROOT}\interactors"
+
+
+
+
+# configure console colors
+${env:AUTOMATON_COLOR_MODE} = AUTOMATON_interactors_libraries_os_read_terminal_color_mode
+
+
+
+
+# configure app metadata
+${env:AUTOMATON_VERSION} = AUTOMATON_interactors_responses_trademarks_get_version
+${env:AUTOMATON_LICENSE} = AUTOMATON_interactors_responses_trademarks_get_license
+${env:AUTOMATON_LANG} = AUTOMATON_interactors_libraries_os_read_lang
 
 
 
@@ -215,7 +128,7 @@ while ($true) {
 		${env:AUTOMATON_DIRECTORY_PROJECT} -eq `
 			[System.IO.Path]::GetPathRoot(${env:AUTOMATON_DIRECTORY_PROJECT})
 	) {
-		$null = AUTOMATON_Print_Error  @"
+		$null = AUTOMATON_interactors_libraries_os_print_error  @"
 '`$AUTOMATON_DIRECTORY_PROJECT' -> ?!?!  <- Dev!!!
 
 "@ ${env:AUTOMATON_COLOR_MODE}
@@ -235,23 +148,7 @@ while ($true) {
 
 
 
-# locate the localized AUTOMATON_DIRECTORY_ROOT App directory
-if (
-	Test-Path -PathType Leaf `
-		-LiteralPath "${env:AUTOMATON_DIRECTORY_PROJECT}\.internals\automaton\app\presenters\init.ps1" `
-) {
-	${env:AUTOMATON_DIRECTORY_ROOT} = "${env:AUTOMATON_DIRECTORY_PROJECT}\.internals\automaton\app"
-} else {
-	${env:AUTOMATON_DIRECTORY_ROOT} = ${env:AUTOMATON_DIRECTORY} -replace 'init\.ps1$'
-	${env:AUTOMATON_DIRECTORY_ROOT} = ${env:AUTOMATON_DIRECTORY_ROOT} -replace '\\$'
-	${env:AUTOMATON_DIRECTORY_ROOT} = ${env:AUTOMATON_DIRECTORY_ROOT} -replace 'presenters$'
-	${env:AUTOMATON_DIRECTORY_ROOT} = ${env:AUTOMATON_DIRECTORY_ROOT} -replace '\\$'
-}
-
-
-
-
-# define all directory names
+# locate AUTOMATON_DIRECTORY_JOBS directory
 if (-not [string]::IsNullOrEmpty(${env:AUTOMATON_DIRECTORY_JOBS})) {
 	${env:AUTOMATON_DIRECTORY_JOBS} = ${env:AUTOMATON_DIRECTORY_JOBS} -replace '\\$'
 } else {
@@ -259,133 +156,30 @@ if (-not [string]::IsNullOrEmpty(${env:AUTOMATON_DIRECTORY_JOBS})) {
 }
 
 
-## setup relative ____job_location for error and help printout
-$____job_location = ${env:AUTOMATON_DIRECTORY_JOBS}
-if (
-	$____job_location.StartsWith(
-		${env:AUTOMATON_DIRECTORY_PWD}, [StringComparison]::Ordinal
-	)
-) {
-	$____job_location = $____job_location.Substring(
-		${env:AUTOMATON_DIRECTORY_PWD}.Length
-	)
-
-	if ($____job_location.StartsWith('\')) {
-		$____job_location = $____job_location.Substring(1)
-	}
-
-	$____job_location = ".\${____job_location}"
-}
-
-
 
 
 # execute by first parameter
-switch -CaseSensitive ("$($args[0])") {
-'run' {
-	if (
-		(${env:AUTOMATON_DIRECTORY_JOBS} -ne "") -and
-		("$($args[1])" -ne "")
-	) {
-		$____job_path = "${env:AUTOMATON_DIRECTORY_JOBS}\$($args[1])\start.ps1"
-		if (Test-Path -PathType Leaf -LiteralPath $____job_path) {
-			$global:LASTEXITCODE = 0
-			& $____job_path
-			$global:LASTEXITCODE = $LASTEXITCODE
-			return
-		}
-	}
-	$null = AUTOMATON_Print_Error @"
-'$($args[1])' = '${____job_location}\$($args[1])\start.ps1' => ???
-"@ ${env:AUTOMATON_COLOR_MODE}
-	$global:LASTEXITCODE = 1
+switch -CaseSensitive ($args[0]) {
+{ $_ -in "-h", "help", "Help", "HELP" } {
+	. "${env:AUTOMATON_DIRECTORY_ROOT}\presenters\help\start.ps1" @args
+	$global:LASTEXITCODE = 0
 	return
-} { $_ -in "-h", "help", "Help", "HELP" } {
+} "license" {
+	. "${env:AUTOMATON_DIRECTORY_ROOT}\presenters\license\start.ps1" @args
+	$global:LASTEXITCODE = 0
+	return
+} "run" {
+	. "${env:AUTOMATON_DIRECTORY_ROOT}\presenters\run\start.ps1" @args
+	$global:LASTEXITCODE = 0
+	return
 } "version" {
-	Write-Output ${env:AUTOMATON_VERSION}
+	. "${env:AUTOMATON_DIRECTORY_ROOT}\presenters\version\start.ps1" @args
 	$global:LASTEXITCODE = 0
 	return
 } default {
-	$null = AUTOMATON_Print_Error @"
+	$null = AUTOMATON_interactors_libraries_os_print_error @"
 '$($args[0])' => ???
 "@ ${env:AUTOMATON_COLOR_MODE}
-	$global:LASTEXITCODE = 1
-	return
-}}
-
-
-
-
-# print help
-$____jobs = ""
-if (${env:AUTOMATON_DIRECTORY_JOBS} -ne "") {
-	if (
-		Test-Path -PathType Container `
-			-LiteralPath ${env:AUTOMATON_DIRECTORY_JOBS}
-	) {
-		foreach ($____item in (
-			Get-ChildItem -ErrorAction SilentlyContinue `
-				-LiteralPath ${env:AUTOMATON_DIRECTORY_JOBS} |
-			Where-Object { $_.Name -notlike '.*' }
-		)) {
-			if (-not $____item.PSIsContainer) {
-				continue
-			}
-
-			if (
-				Test-Path -PathType Leaf `
-					-LiteralPath (Join-Path $____item.FullName 'start.ps1')
-			) {
-				$____jobs = "${____jobs}`t* $($____item.Name)`n"
-			}
-		}
-	}
-}
-
-if ($____jobs -eq "") {
-	$____jobs = "----"
-}
-
-$____message = @"
-(Holloway) Chew, Kean Ho's
-_______ _     _ _______  _____  _______ _______ _______  _____  __   __
-|_____| |     |    |    |     | |  |  | |_____|    |    |     | | \\  |
-|     | |_____|    |    |_____| |  |  | |     |    |    |_____| |  \\_|
-_________________________________________________________________________
-${env:AUTOMATON_VERSION}
-0bsd
-
-$ [COMMAND] run [JOB] -> ${____job_location}/[JOB]/start.{sh,ps1}
-$ [COMMAND] help
-$ [COMMAND] version
-_________________________________________________________________________
-
-[JOBS]:
-${____jobs}
-
-
-AUTOMATON_DIRECTORY_PWD:
-${env:AUTOMATON_DIRECTORY_PWD}
-
-AUTOMATON_DIRECTORY_PROJECT:
-${env:AUTOMATON_DIRECTORY_PROJECT}
-
-AUTOMATON_DIRECTORY_JOBS:
-${env:AUTOMATON_DIRECTORY_JOBS}
-
-AUTOMATON_DIRECTORY_ROOT:
-${env:AUTOMATON_DIRECTORY_ROOT}
-
-AUTOMATON_COLOR_MODE:
-${env:AUTOMATON_COLOR_MODE}
-"@
-switch -CaseSensitive ("$($args[0])") {
-{ $_ -in "-h", "help", "Help", "HELP" } {
-	$null = AUTOMATON_Print_Info $____message ${env:AUTOMATON_COLOR_MODE}
-	$global:LASTEXITCODE = 0
-	return
-} default {
-	$null = AUTOMATON_Print_Error $____message ${env:AUTOMATON_COLOR_MODE}
 	$global:LASTEXITCODE = 1
 	return
 }}
