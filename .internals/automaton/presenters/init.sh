@@ -146,6 +146,10 @@ AUTOMATON_DIRECTORY_JOBS="${AUTOMATON_DIRECTORY_JOBS%/}"
 
 # execute by first parameter
 case "${1:-}" in
+create)
+	. "${AUTOMATON_DIRECTORY_ROOT}/presenters/create/start.sh"
+	return 0
+	;;
 -h|help|Help|HELP)
 	. "${AUTOMATON_DIRECTORY_ROOT}/presenters/help/start.sh"
 	return 0

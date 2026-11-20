@@ -1,0 +1,154 @@
+#!/bin/sh
+# Copyright 2026 The Automaton Project Team (https://github.com/ChewKeanHo/software-automaton)
+#
+# The above unified aliases have one or more actual legal entities listed
+# outside of this document: (1) 'CREATORS.txt' or 'AUTHORS.txt'; and
+# (2) 'CONTRIBUTORS.txt'. They are located usually placed next to this document
+# in their respective project repository. Please refer to them for compiling the
+# complete list accordingly.
+#
+#
+# Zero-Clause BSD
+# ===============
+#
+# Permission to use, copy, modify, and/or distribute this software for
+# any purpose with or without fee is hereby granted.
+#
+# THE SOFTWARE IS PROVIDED “AS IS” AND THE AUTHOR DISCLAIMS ALL
+# WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES
+# OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE
+# FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY
+# DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN
+# AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT
+# OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+
+
+
+# check $AUTOMATON_DIRECTORY_JOBS validity
+if [ "$AUTOMATON_DIRECTORY_JOBS" = "" ]; then
+	AUTOMATON_interactors_libraries_os_print_error "\
+\$AUTOMATON_DIRECTORY_JOBS => ???
+" "$AUTOMATON_COLOR_MODE"
+	return 1
+fi
+
+
+
+
+# check [JOB] validity
+if [ "${2:-}" = "" ]; then
+	AUTOMATON_interactors_libraries_os_print_error "\
+[JOB] => ???
+" "$AUTOMATON_COLOR_MODE"
+	return 1
+fi
+
+
+
+
+# check existing entry
+if [ -e "${AUTOMATON_DIRECTORY_JOBS}/${2:-}" ]; then
+	AUTOMATON_interactors_libraries_os_print_error "\
+'${AUTOMATON_DIRECTORY_JOBS}/${2:-}' => ???
+" "$AUTOMATON_COLOR_MODE"
+	return 1
+fi
+
+
+
+
+## create directory node
+AUTOMATON_interactors_libraries_fs_create_directory "${AUTOMATON_DIRECTORY_JOBS}/${2:-}"
+if [ $? -ne 0 ]; then
+	AUTOMATON_interactors_libraries_os_print_error "\
+'${AUTOMATON_DIRECTORY_JOBS}/${2:-}' => !!!
+" "$AUTOMATON_COLOR_MODE"
+	return 1
+fi
+
+
+
+
+## create start.sh
+AUTOMATON_interactors_libraries_fs_create_update_file \
+	"${AUTOMATON_DIRECTORY_JOBS}/${2:-}/start.sh" \
+	"\
+#!/bin/sh
+# Copyright 2026 The Automaton Project Team (https://github.com/ChewKeanHo/software-automaton)
+#
+# The above unified aliases have one or more actual legal entities listed
+# outside of this document: (1) 'CREATORS.txt' or 'AUTHORS.txt'; and
+# (2) 'CONTRIBUTORS.txt'. They are located usually placed next to this document
+# in their respective project repository. Please refer to them for compiling the
+# complete list accordingly.
+#
+#
+$(AUTOMATON_interactors_responses_licenses_render_license_notice "# ")
+
+
+
+
+# print demo
+1>&2 printf -- \"%s\\n\" \"Hello World, from '${2:-}'.\"
+
+
+
+
+# report status
+return 0
+" \
+	"false" \
+	"false"
+if [ $? -ne 0 ]; then
+	AUTOMATON_interactors_libraries_os_print_error "\
+'${AUTOMATON_DIRECTORY_JOBS}/${2:-}' => !!!
+" "$AUTOMATON_COLOR_MODE"
+	return 1
+fi
+
+
+
+
+## create start.ps1
+AUTOMATON_interactors_libraries_fs_create_update_file \
+	"${AUTOMATON_DIRECTORY_JOBS}/${2:-}/start.ps1" \
+	"\
+#requires -Version 5.1
+# Copyright 2026 The Automaton Project Team (https://github.com/ChewKeanHo/software-automaton)
+#
+# The above unified aliases have one or more actual legal entities listed
+# outside of this document: (1) 'CREATORS.txt' or 'AUTHORS.txt'; and
+# (2) 'CONTRIBUTORS.txt'. They are located usually placed next to this document
+# in their respective project repository. Please refer to them for compiling the
+# complete list accordingly.
+#
+#
+$(AUTOMATON_interactors_responses_licenses_render_license_notice "# ")
+
+
+
+
+# print demo
+\$null = Write-Host \"Hello World, from '${2:-}'.\"
+
+
+
+
+# report status
+return 0
+" \
+	"false" \
+	"false"
+if [ $? -ne 0 ]; then
+	AUTOMATON_interactors_libraries_os_print_error "\
+'${AUTOMATON_DIRECTORY_JOBS}/${2:-}' => !!!
+" "$AUTOMATON_COLOR_MODE"
+	return 1
+fi
+
+
+
+
+# report status
+return 0

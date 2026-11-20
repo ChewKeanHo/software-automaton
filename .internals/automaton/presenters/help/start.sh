@@ -27,6 +27,10 @@
 
 # execute
 case "${2:-}" in
+create)
+	. "${AUTOMATON_DIRECTORY_ROOT}/presenters/help/create/start.sh"
+	return $?
+	;;
 license)
 	. "${AUTOMATON_DIRECTORY_ROOT}/presenters/help/license/start.sh"
 	return $?
