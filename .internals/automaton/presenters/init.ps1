@@ -160,6 +160,10 @@ if (-not [string]::IsNullOrEmpty(${env:AUTOMATON_DIRECTORY_JOBS})) {
 
 # execute by first parameter
 switch -CaseSensitive ($args[0]) {
+"create" {
+	. "${env:AUTOMATON_DIRECTORY_ROOT}\presenters\create\start.ps1" @args
+	$global:LASTEXITCODE = 0
+	return
 { $_ -in "-h", "help", "Help", "HELP" } {
 	. "${env:AUTOMATON_DIRECTORY_ROOT}\presenters\help\start.ps1" @args
 	$global:LASTEXITCODE = 0

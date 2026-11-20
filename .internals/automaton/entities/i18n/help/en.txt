@@ -22,8 +22,10 @@
 # OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 _________________________________________________________________________
 
+$ chewkeanho-automaton create [JOB]
 $ chewkeanho-automaton license
 $ chewkeanho-automaton help
+$ chewkeanho-automaton help create
 $ chewkeanho-automaton help license
 $ chewkeanho-automaton help list
 $ chewkeanho-automaton help run
