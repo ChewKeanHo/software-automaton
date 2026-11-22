@@ -54,7 +54,7 @@ function AUTOMATON_interactors_responses_trademarks_get_header {
 		Get-Content -Path "${env:AUTOMATON_DIRECTORY_ROOT}\entities\i18n\licenses\0bsd\en.txt"
 	)) {
 		$____output_prefix = $____comment_prefix
-		if ([string]::IsNullOrEmpty($____line) {
+		if ([string]::IsNullOrEmpty($____line)) {
 			$____output_prefix = $____output_prefix -replace '\w*$', ''
 		}
 

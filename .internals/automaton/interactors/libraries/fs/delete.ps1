@@ -76,14 +76,35 @@ function AUTOMATON_interactors_libraries_fs_delete {
 	##	'\path\dir\', '\path\dir\.' -> '\path\dir'
 	$____runtime_input = $____input -replace '[\\/]\.?$', ''
 	switch -CaseSensitive -Regex ($____runtime_input) {
-	'^$', '^[A-Za-z]:$' {
+	'^$' {
 		## deleting the root directory itself is never a valid
 		## operation.
 		$null = Remove-Variable -Name ____runtime_input `
 				-ErrorAction SilentlyContinue
 		$global:LASTEXITCODE = 3
 		return
-	} '^\.$', '^\.\.$', '.*[\\/]\.\.$' {
+	} '^[A-Za-z]:$' {
+		## deleting the root directory itself is never a valid
+		## operation.
+		$null = Remove-Variable -Name ____runtime_input `
+				-ErrorAction SilentlyContinue
+		$global:LASTEXITCODE = 3
+		return
+	} '^\.$' {
+		## do not service any precise relative path for safety
+		## purposes.
+		$null = Remove-Variable -Name ____runtime_input `
+				-ErrorAction SilentlyContinue
+		$global:LASTEXITCODE = 3
+		return
+	} '^\.\.$' {
+		## do not service any precise relative path for safety
+		## purposes.
+		$null = Remove-Variable -Name ____runtime_input `
+				-ErrorAction SilentlyContinue
+		$global:LASTEXITCODE = 3
+		return
+	} '.*[\\/]\.\.$' {
 		## do not service any precise relative path for safety
 		## purposes.
 		$null = Remove-Variable -Name ____runtime_input `
@@ -113,7 +134,10 @@ function AUTOMATON_interactors_libraries_fs_delete {
 				-ErrorAction SilentlyContinue
 		$global:LASTEXITCODE = 3
 		return
-	} elseif ($____runtime_item.PSIsContainer -and $null -eq $____runtime_item.Parent) {
+	} elseif (
+		$____runtime_item.PSIsContainer -and
+		($____runtime_item.Parent -eq $null)
+	) {
 		## refuse to delete a filesystem root (its 'Parent' is null)
 		$null = Remove-Variable -Name ____runtime_input `
 				-ErrorAction SilentlyContinue
@@ -191,7 +215,7 @@ function AUTOMATON_interactors_libraries_fs_delete {
 			$null = Remove-Variable -Name ____runtime_temp `
 					-ErrorAction SilentlyContinue
 			$null = Remove-Variable -Name ____runtime_item `
-				-ErrorAction SilentlyContinue
+					-ErrorAction SilentlyContinue
 			$global:LASTEXITCODE = 1
 			return
 		}
@@ -209,7 +233,7 @@ function AUTOMATON_interactors_libraries_fs_delete {
 			$null = Remove-Variable -Name ____runtime_temp `
 					-ErrorAction SilentlyContinue
 			$null = Remove-Variable -Name ____runtime_item `
-				-ErrorAction SilentlyContinue
+					-ErrorAction SilentlyContinue
 			$global:LASTEXITCODE = 1
 			return
 		}
