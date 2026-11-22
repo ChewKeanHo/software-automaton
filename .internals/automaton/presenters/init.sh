@@ -150,6 +150,10 @@ create)
 	. "${AUTOMATON_DIRECTORY_ROOT}/presenters/create/start.sh"
 	return 0
 	;;
+delete)
+	. "${AUTOMATON_DIRECTORY_ROOT}/presenters/delete/start.sh"
+	return 0
+	;;
 -h|help|Help|HELP)
 	. "${AUTOMATON_DIRECTORY_ROOT}/presenters/help/start.sh"
 	return 0

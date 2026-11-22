@@ -31,6 +31,10 @@ create)
 	. "${AUTOMATON_DIRECTORY_ROOT}/presenters/help/create/start.sh"
 	return $?
 	;;
+delete)
+	. "${AUTOMATON_DIRECTORY_ROOT}/presenters/help/delete/start.sh"
+	return $?
+	;;
 license)
 	. "${AUTOMATON_DIRECTORY_ROOT}/presenters/help/license/start.sh"
 	return $?

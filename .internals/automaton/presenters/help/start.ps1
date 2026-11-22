@@ -31,6 +31,10 @@ switch -CaseSensitive ($args[1]) {
 	$null = . "${env:AUTOMATON_DIRECTORY_ROOT}\presenters\help\create\start.ps1" @args
 	$global:LASTEXITCODE = 0
 	return
+"delete" {
+	$null = . "${env:AUTOMATON_DIRECTORY_ROOT}\presenters\help\delete\start.ps1" @args
+	$global:LASTEXITCODE = 0
+	return
 "license" {
 	$null = . "${env:AUTOMATON_DIRECTORY_ROOT}\presenters\help\license\start.ps1" @args
 	$global:LASTEXITCODE = 0
