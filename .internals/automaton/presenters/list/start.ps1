@@ -21,12 +21,17 @@
 # DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN
 # AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT
 # OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-if ([string]::IsNullOrEmpty(${env:AUTOMATON_DIRECTORY_JOB})) {
-	AUTOMATON_interactors_libraries_os_print_error @"
+
+
+
+
+# check $AUTOMATON_DIRECTORY_JOBS validity
+if ([string]::IsNullOrEmpty(${env:AUTOMATON_DIRECTORY_JOBS})) {
+	$null = AUTOMATON_interactors_libraries_os_print_error @"
 `$AUTOMATON_DIRECTORY_JOBS => ???
 "@ ${env:AUTOMATON_COLOR_MODE}
 	$global:LASTEXITCODE = 1
-	return 1
+	return
 }
 
 
@@ -34,7 +39,7 @@ if ([string]::IsNullOrEmpty(${env:AUTOMATON_DIRECTORY_JOB})) {
 
 ## scan directory
 $____jobs_list = ""
-foreach ($____job in (Get-ChildItem -Path ${env:AUTOMATON_DIRECTORY_JOB})) {
+foreach ($____job in (Get-ChildItem -Path ${env:AUTOMATON_DIRECTORY_JOBS})) {
 	if (-not (Test-Path -PathType Container -LiteralPath $____job)) {
 		continue
 	}
@@ -47,23 +52,15 @@ foreach ($____job in (Get-ChildItem -Path ${env:AUTOMATON_DIRECTORY_JOB})) {
 		continue
 	}
 
-	$____job = Split-Path -Leaf -LiteralPath $____job
-
+	$____job = Split-Path -Leaf -Path $____job
 	$____jobs_list = "${____jobs_list}${____job}`n"
 }
 $null = Remove-Variable -Name ____job -ErrorAction SilentlyContinue
-$____jobs_list = $____jobs_list.Trim()
+$____jobs_list = $____jobs_list -replace '\n$', ''
 
 
 
 
 # all good - output now
-Write-Output $____jobs_list
-$null = Remove-Variable -Name ____jobs_list -ErrorAction SilentlyContinue
-
-
-
-
-# report status
 $global:LASTEXITCODE = 0
-return 0
+return $____jobs_list

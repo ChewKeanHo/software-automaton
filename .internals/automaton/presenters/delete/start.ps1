@@ -26,7 +26,7 @@
 
 
 # check $AUTOMATON_DIRECTORY_JOBS validity
-if ([string]::IsNullOrEmpty(${env:AUTOMATON_DIRECTORY_JOB})) {
+if ([string]::IsNullOrEmpty(${env:AUTOMATON_DIRECTORY_JOBS})) {
 	$null = AUTOMATON_interactors_libraries_os_print_error @"
 `$AUTOMATON_DIRECTORY_JOBS => ???
 "@ ${env:AUTOMATON_COLOR_MODE}
@@ -50,7 +50,10 @@ if ([string]::IsNullOrEmpty($args[1])) {
 
 
 # check existing directory
-if (-not Test-Path -LiteralPath "${env:AUTOMATON_DIRECTORY_JOBS}\$($args[1])") {
+if (-not (
+	Test-Path -PathType Container `
+		-LiteralPath "${env:AUTOMATON_DIRECTORY_JOBS}\$($args[1])"
+)) {
 	$null = AUTOMATON_interactors_libraries_os_print_error @"
 ${env:AUTOMATON_DIRECTORY_JOBS}\$($args[1]) => ???
 "@ ${env:AUTOMATON_COLOR_MODE}
@@ -63,7 +66,8 @@ ${env:AUTOMATON_DIRECTORY_JOBS}\$($args[1]) => ???
 
 ## delete target
 $null = AUTOMATON_interactors_libraries_fs_delete `
-	"${env:AUTOMATON_DIRECTORY_JOBS}\$($args[1])"
+	"${env:AUTOMATON_DIRECTORY_JOBS}\$($args[1])" `
+	$true
 if ($global:LASTEXITCODE -ne 0) {
 	$null = AUTOMATON_interactors_libraries_os_print_error @"
 ${env:AUTOMATON_DIRECTORY_JOBS}\$($args[1]) => !!!

@@ -21,40 +21,66 @@
 # DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN
 # AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT
 # OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-if ((${env:AUTOMATON_DIRECTORY_JOBS} -ne "") -and ("$($args[1])" -ne "")) {
-	$____job_path = "${env:AUTOMATON_DIRECTORY_JOBS}\$($args[1])\start.ps1"
-	if (Test-Path -PathType Leaf -LiteralPath $____job_path) {
-		$global:LASTEXITCODE = 0
-		& $____job_path
-		$global:LASTEXITCODE = $LASTEXITCODE
-		return
-	}
-}
 
 
 
 
-# default action
-$____job_location = ${env:AUTOMATON_DIRECTORY_JOBS}
-if (
-	$____job_location.StartsWith(
-		${env:AUTOMATON_DIRECTORY_PWD}, [StringComparison]::Ordinal
-	)
-) {
-	$____job_location = $____job_location.Substring(
-		${env:AUTOMATON_DIRECTORY_PWD}.Length
-	)
-
-	if ($____job_location.StartsWith('\')) {
-		$____job_location = $____job_location.Substring(1)
-	}
-
-	$____job_location = ".\${____job_location}"
-}
-
-
-$null = AUTOMATON_Print_Error @"
-'$($args[1])' = '${____job_location}\$($args[1])\start.ps1' => ???
+# check $AUTOMATON_DIRECTORY_JOBS validity
+if ([string]::IsNullOrEmpty(${env:AUTOMATON_DIRECTORY_JOBS})) {
+	$null = AUTOMATON_interactors_libraries_os_print_error @"
+`$AUTOMATON_DIRECTORY_JOBS => ???
 "@ ${env:AUTOMATON_COLOR_MODE}
-$global:LASTEXITCODE = 1
+	$global:LASTEXITCODE = 1
+	return
+}
+
+
+
+
+# check [JOB] validity
+if ([string]::IsNullOrEmpty($args[1])) {
+	$null = AUTOMATON_interactors_libraries_os_print_error @"
+[JOB] => ???
+"@ ${env:AUTOMATON_COLOR_MODE}
+	$global:LASTEXITCODE = 1
+	return
+}
+
+
+
+
+# test job path
+$____job_path = "${env:AUTOMATON_DIRECTORY_JOBS}\$($args[1])\start.sh"
+if (-not (Test-Path -PathType Leaf -LiteralPath $____job_path)) {
+	$null = AUTOMATON_interactors_libraries_os_print_error @"
+${env:AUTOMATON_DIRECTORY_JOBS}\$($args[1])\start.sh => ???
+"@ ${env:AUTOMATON_COLOR_MODE}
+	$global:LASTEXITCODE = 1
+	return
+}
+
+
+$____job_path = "${env:AUTOMATON_DIRECTORY_JOBS}\$($args[1])\start.ps1"
+if (-not (Test-Path -PathType Leaf -LiteralPath $____job_path)) {
+	$null = AUTOMATON_interactors_libraries_os_print_error @"
+${env:AUTOMATON_DIRECTORY_JOBS}\$($args[1])\start.ps1 => ???
+"@ ${env:AUTOMATON_COLOR_MODE}
+	$global:LASTEXITCODE = 1
+	return
+}
+
+
+
+
+# execute job path
+$global:LASTEXITCODE = 0
+& $____job_path
+if (
+	($global:LASTEXITCODE -ne $null) -and
+	($global:LASTEXITCODE -match '^[0-9]*$')
+) {
+	$global:LASTEXITCODE = $global:LASTEXITCODE
+} elseif ($LASTEXITCODE) {
+	$global:LASTEXITCODE = $LASTEXITCODE
+}
 return

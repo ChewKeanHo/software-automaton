@@ -41,7 +41,7 @@
 #		*	means any of the given input is empty.
 #	'1'
 #		*	means bad execution.
-function AUTOMATON_interactors_responses_trademarks_get_header {
+function AUTOMATON_interactors_responses_licenses_render_license_notice {
 	param (
 		[string]$____comment_prefix
 	)

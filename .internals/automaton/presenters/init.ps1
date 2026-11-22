@@ -162,31 +162,24 @@ if (-not [string]::IsNullOrEmpty(${env:AUTOMATON_DIRECTORY_JOBS})) {
 switch -CaseSensitive ($args[0]) {
 "create" {
 	. "${env:AUTOMATON_DIRECTORY_ROOT}\presenters\create\start.ps1" @args
-	$global:LASTEXITCODE = 0
 	return
 } "delete" {
 	. "${env:AUTOMATON_DIRECTORY_ROOT}\presenters\delete\start.ps1" @args
-	$global:LASTEXITCODE = 0
 	return
 } { $_ -in "-h", "help", "Help", "HELP" } {
 	. "${env:AUTOMATON_DIRECTORY_ROOT}\presenters\help\start.ps1" @args
-	$global:LASTEXITCODE = 0
 	return
 } "license" {
 	. "${env:AUTOMATON_DIRECTORY_ROOT}\presenters\license\start.ps1" @args
-	$global:LASTEXITCODE = 0
 	return
 } "list" {
 	. "${env:AUTOMATON_DIRECTORY_ROOT}\presenters\list\start.ps1" @args
-	$global:LASTEXITCODE = 0
 	return
 } "run" {
 	. "${env:AUTOMATON_DIRECTORY_ROOT}\presenters\run\start.ps1" @args
-	$global:LASTEXITCODE = 0
 	return
 } "version" {
 	. "${env:AUTOMATON_DIRECTORY_ROOT}\presenters\version\start.ps1" @args
-	$global:LASTEXITCODE = 0
 	return
 } default {
 	$null = AUTOMATON_interactors_libraries_os_print_error @"

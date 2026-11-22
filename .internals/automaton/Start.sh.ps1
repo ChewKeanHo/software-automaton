@@ -163,11 +163,27 @@ E: Failed to Locate Init File. Bailing Out...
 
 
 # execute
-. $env:AUTOMATON_DIRECTORY @args
-if ($global:LASTEXITCODE -eq 0) {
-	exit 0
-} elseif (($global:LASTEXITCODE -gt 0) -or ($global:LASTEXITCODE -lt 0)) {
-	exit $global:LASTEXITCODE
+try {
+	. $env:AUTOMATON_DIRECTORY @args
+	if ($global:LASTEXITCODE -eq 0) {
+		exit 0
+	}
+
+	if ($global:LASTEXITCODE -eq $null) {
+		exit 1
+	}
+
+	if ($global:LASTEXITCODE -match '^[0-9]*$') {
+		exit $global:LASTEXITCODE
+	}
+} catch {
+	if ($global:LASTEXITCODE -eq $null) {
+		exit 1
+	}
+
+	if ($global:LASTEXITCODE -match '^[0-9]*$') {
+		exit $global:LASTEXITCODE
+	}
 }
 ################################################################################
 # Windows POWERSHELL Codes                                                     #

@@ -25,6 +25,7 @@ _________________________________________________________________________
 $ chewkeanho-automaton create [JOB]
 $ chewkeanho-automaton delete [JOB]
 $ chewkeanho-automaton license
+$ chewkeanho-automaton list
 $ chewkeanho-automaton help
 $ chewkeanho-automaton help create
 $ chewkeanho-automaton help delete

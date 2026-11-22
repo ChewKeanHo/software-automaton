@@ -35,7 +35,8 @@ for POSIX Shell and PowerShell respectively. If they are missing on execute,
 the [JOB] directory is then deemed invalid and an error will be raised.
 
 The default CI directory (when $AUTOMATON_DIRECTORY_JOBS is not explicitly
-specified is './.internals/ci/' directory relative to the current directory.
-The path pattern is as follows:
+specified) is './.internals/ci/' relative to the current directory.
+The pathing pattern is as follows:
 	* path:    ${AUTOMATON_DIRECTORY_JOBS}/[JOB]/start.{sh,ps1}
 	* default:             ./.internals/ci/[JOB]/start.{sh,ps1}
+	* custom:            /path/to/your/dir/[JOB]/start.{sh,ps1}

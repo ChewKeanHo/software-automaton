@@ -27,7 +27,7 @@ _________________________________________________________________________
 
 CREATE COMMAND
 
-This command create a given [JOB] directory set inside
+This command creates a given [JOB] directory set inside
 $AUTOMATON_DIRECTORY_JOBS directory.
 
 It creates both 'start.sh' and 'start.ps1' placeholder files.

@@ -21,28 +21,54 @@
 # DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN
 # AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT
 # OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-if [ ! "$AUTOMATON_DIRECTORY_JOBS" = "" ] && [ ! "${2:-}" = "" ]; then
-	if [ -f "${AUTOMATON_DIRECTORY_JOBS}/${2:-}/start.sh" ]; then
-		({
-			. "${AUTOMATON_DIRECTORY_JOBS}/${2:-}/start.sh"
-			exit $?
-		})
-		return $?
-	fi
-fi
 
 
 
 
-# default action
-____job_location="${AUTOMATON_DIRECTORY_JOBS##"$AUTOMATON_DIRECTORY_PWD"}"
-if [ ! "$____job_location" = "$AUTOMATON_DIRECTORY_JOBS" ]; then
-	____job_location="${____job_location#"/"}"
-	____job_location="./${____job_location}"
-fi
-
-
-AUTOMATON_Print_Error "\
-'${2:-}' = '${____job_location}/${2:-}/start.sh' => ???
+# check $AUTOMATON_DIRECTORY_JOBS validity
+if [ "$AUTOMATON_DIRECTORY_JOBS" = "" ]; then
+	AUTOMATON_interactors_libraries_os_print_error "\
+\$AUTOMATON_DIRECTORY_JOBS => ???
 " "$AUTOMATON_COLOR_MODE"
-return 1
+	return 1
+fi
+
+
+
+
+# check [JOB] validity
+if [ "${2:-}" = "" ]; then
+	AUTOMATON_interactors_libraries_os_print_error "\
+[JOB] => ???
+" "$AUTOMATON_COLOR_MODE"
+	return 1
+fi
+
+
+
+
+# test job path
+if [ ! -f "${AUTOMATON_DIRECTORY_JOBS}/${2:-}/start.ps1" ]; then
+	AUTOMATON_interactors_libraries_os_print_error "\
+${AUTOMATON_DIRECTORY_JOBS}/${2:-}/start.ps1 => ???
+" "$AUTOMATON_COLOR_MODE"
+	return 1
+fi
+
+
+if [ ! -f "${AUTOMATON_DIRECTORY_JOBS}/${2:-}/start.sh" ]; then
+	AUTOMATON_interactors_libraries_os_print_error "\
+${AUTOMATON_DIRECTORY_JOBS}/${2:-}/start.sh => ???
+" "$AUTOMATON_COLOR_MODE"
+	return 1
+fi
+
+
+
+
+# execute path
+({
+	. "${AUTOMATON_DIRECTORY_JOBS}/${2:-}/start.sh"
+	exit $?
+})
+return $?

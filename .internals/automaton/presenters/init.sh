@@ -148,31 +148,31 @@ AUTOMATON_DIRECTORY_JOBS="${AUTOMATON_DIRECTORY_JOBS%/}"
 case "${1:-}" in
 create)
 	. "${AUTOMATON_DIRECTORY_ROOT}/presenters/create/start.sh"
-	return 0
+	return $?
 	;;
 delete)
 	. "${AUTOMATON_DIRECTORY_ROOT}/presenters/delete/start.sh"
-	return 0
+	return $?
 	;;
 -h|help|Help|HELP)
 	. "${AUTOMATON_DIRECTORY_ROOT}/presenters/help/start.sh"
-	return 0
+	return $?
 	;;
 license)
 	. "${AUTOMATON_DIRECTORY_ROOT}/presenters/license/start.sh"
-	return 0
+	return $?
 	;;
 list)
 	. "${AUTOMATON_DIRECTORY_ROOT}/presenters/list/start.sh"
-	return 0
+	return $?
 	;;
 run)
 	. "${AUTOMATON_DIRECTORY_ROOT}/presenters/run/start.sh"
-	return 0
+	return $?
 	;;
 version)
 	. "${AUTOMATON_DIRECTORY_ROOT}/presenters/version/start.sh"
-	return 0
+	return $?
 	;;
 *)
 	AUTOMATON_interactors_libraries_os_print_error "\

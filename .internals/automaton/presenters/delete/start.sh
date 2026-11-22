@@ -59,7 +59,9 @@ fi
 
 
 ## delete target
-AUTOMATON_interactors_libraries_fs_delete "${AUTOMATON_DIRECTORY_JOBS}/${2:-}"
+AUTOMATON_interactors_libraries_fs_delete \
+	"${AUTOMATON_DIRECTORY_JOBS}/${2:-}" \
+	"true"
 if [ $? -ne 0 ]; then
 	AUTOMATON_interactors_libraries_os_print_error "\
 '${AUTOMATON_DIRECTORY_JOBS}/${2:-}' => !!!

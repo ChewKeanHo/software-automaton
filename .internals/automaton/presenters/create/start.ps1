@@ -26,7 +26,7 @@
 
 
 # check $AUTOMATON_DIRECTORY_JOBS validity
-if ([string]::IsNullOrEmpty(${env:AUTOMATON_DIRECTORY_JOB})) {
+if ([string]::IsNullOrEmpty(${env:AUTOMATON_DIRECTORY_JOBS})) {
 	$null = AUTOMATON_interactors_libraries_os_print_error @"
 `$AUTOMATON_DIRECTORY_JOBS => ???
 "@ ${env:AUTOMATON_COLOR_MODE}
@@ -136,7 +136,7 @@ $(AUTOMATON_interactors_responses_licenses_render_license_notice "# ")
 
 
 # print demo
-$null = Write-Host "Hello World, from '$(args[1])'."
+$null = Write-Host "Hello World, from '$($args[1])'."
 
 
 
