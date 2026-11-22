@@ -6,6 +6,7 @@ _______ _     _ _______  _____  _______ _______ _______  _____  __   __
 |     | |_____|    |    |_____| |  |  | |     |    |    |_____| |  \\_|
 ```
 
+
 ***Automate Reliably. Scale Confidently.***
 
 `Automaton` is `(Holloway) Chew, Kean Ho`'s production-grade automation
@@ -218,8 +219,8 @@ $ unzip -d /path/to/directory chewkeanho_automaton_1.0.0_windows_all.zip
 
 ### Copy/Overwrite into Your Repository
 
-Place or overwrite existing `automaton/` directory inside your root repository
-with such pathing:
+Place or overwrite existing `.internals/automaton/` directory inside your root
+repository with such pathing:
 
 ```
 your_project/
@@ -228,7 +229,7 @@ your_project/
   |
   +-- .internals/
           |
-          +-- automaton/            <-- place or overwrite automaton/ here
+          +-- automaton/            <-- place or overwrite '.internals/automaton/' here
 ```
 
 That is how you add|update `(Holloway) Chew, Kean Ho's Automaton` into your
@@ -319,7 +320,7 @@ I:      * Build
 > [!NOTE]
 >
 > For quick and lazy setup, the package actually distributes a default set of
-> tested CI jobs as `ci/` directory. Refer below for instructions.
+> tested CI jobs as `.internals/ci/` directory. Refer below for instructions.
 
 
 
@@ -364,8 +365,8 @@ Once you are satisfied, you can work on your automated CI triggers like
 >
 > For quick and lazy setup, the package actually distributes a default and
 > tested set of CI configuration files namely `github-ci.yml` and
-> `gitlab-ci.yml` matching the distributed default set as `ci/` directory. You
-> can place them as follows:
+> `gitlab-ci.yml` matching the distributed default set as `.internals/ci/`
+> directory. You can place them as follows:
 >
 > ```
 > your_project/
@@ -385,7 +386,7 @@ Once you are satisfied, you can work on your automated CI triggers like
 >           |
 >           +-- automaton/              <-- place automaton here
 >           |
->           +-- ci/                     <-- place ci directory here
+>           +-- ci/                     <-- place '.internals/ci' directory here
 > ```
 >
 > These default configuration files **REQUIRE** you to set the `$RUNNERS` CI
@@ -478,6 +479,15 @@ use of Artificial Intelligence.
 
 Please refer to [CONTRIBUTING.md](CONTRIBUTING.md) for contributing &
 maintenance guidelines.
+
+
+
+
+## Changelog
+
+
+Please refer to [CHANGELOG.md](CHANGELOG.md) for the project's changes between
+releases.
 
 
 

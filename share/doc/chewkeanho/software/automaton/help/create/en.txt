@@ -1,0 +1,40 @@
+# Copyright 2026 The Automaton Project Team (https://github.com/ChewKeanHo/software-automaton)
+#
+# The above unified aliases have one or more actual legal entities listed
+# outside of this document: (1) 'CREATORS.txt' or 'AUTHORS.txt'; and
+# (2) 'CONTRIBUTORS.txt'. They are located usually placed next to this document
+# in their respective project repository. Please refer to them for compiling the
+# complete list accordingly.
+#
+#
+# Zero-Clause BSD
+# ===============
+#
+# Permission to use, copy, modify, and/or distribute this software for
+# any purpose with or without fee is hereby granted.
+#
+# THE SOFTWARE IS PROVIDED “AS IS” AND THE AUTHOR DISCLAIMS ALL
+# WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES
+# OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE
+# FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY
+# DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN
+# AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT
+# OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+_________________________________________________________________________
+
+$ chewkeanho-automaton create [JOB]
+_________________________________________________________________________
+
+CREATE COMMAND
+
+This command creates a given [JOB] directory set inside
+$AUTOMATON_DIRECTORY_JOBS directory.
+
+It creates both 'start.sh' and 'start.ps1' placeholder files.
+
+The default CI directory (when $AUTOMATON_DIRECTORY_JOBS is not explicitly
+specified) is './.internals/ci/' relative to the current directory.
+The pathing pattern is as follows:
+	* path:    ${AUTOMATON_DIRECTORY_JOBS}/[JOB]/start.{sh,ps1}
+	* default:             ./.internals/ci/[JOB]/start.{sh,ps1}
+	* custom:            /path/to/your/dir/[JOB]/start.{sh,ps1}
