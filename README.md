@@ -6,6 +6,8 @@ _______ _     _ _______  _____  _______ _______ _______  _____  __   __
 |     | |_____|    |    |_____| |  |  | |     |    |    |_____| |  \\_|
 ```
 
+[![banner](/.internals/trademarks/banner_1200x100.svg)](#)
+
 ***Automate Reliably. Scale Confidently.***
 
 `Automaton` is `(Holloway) Chew, Kean Ho`'s production-grade automation
@@ -483,6 +485,16 @@ use of Artificial Intelligence.
 
 Please refer to [CONTRIBUTING.md](CONTRIBUTING.md) for contributing &
 maintenance guidelines.
+
+
+
+
+## Changelog
+
+[![banner](/.internals/trademarks/banner_1200x100.svg)](#)
+
+Please refer to [CHANGELOG.md](CHANGELOG.md) for the project's changes between
+releases.
 
 
 
