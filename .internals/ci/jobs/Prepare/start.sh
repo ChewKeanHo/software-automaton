@@ -25,8 +25,30 @@
 
 
 
-# print demo
-1>&2 printf -- "%s\n" "Hello World, from 'Prepare'."
+# check Automaton's health and status
+1>&2 printf -- "%s" "\
+I: Checking Automaton's Usability...
+"
+if [ ! -x "./.internals/automaton/Start.sh.ps1" ]; then
+	1>&2 printf -- "%s" "\
+E: Execution Failed (file).
+E: Are You At Repository's Root Directory?
+E: Unable to Proceed.
+E: Bailing Out...
+"
+	return 1
+fi
+
+
+./.internals/automaton/Start.sh.ps1 help
+if [ $? -ne 0 ]; then
+	1>&2 printf -- "%s" "\
+E: Execution Failed (help).
+E: Unable to Proceed.
+E: Bailing Out...
+"
+	return 1
+fi
 
 
 

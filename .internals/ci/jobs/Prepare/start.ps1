@@ -1,4 +1,4 @@
-#!/bin/sh
+#requires -Version 5.1
 # Copyright 2026 The Automaton Project Team (https://github.com/ChewKeanHo/software-automaton)
 #
 # The above unified aliases have one or more actual legal entities listed
@@ -25,11 +25,36 @@
 
 
 
-# print demo
-$null = Write-Host "Hello World, from 'Prepare'."
+# check Automaton's health and status
+$null = Write-Host @"
+I: Checking Automaton's Usability...
+"@
+if (-not (Test-Path -Path ".\.internals\automaton\Start.sh.ps1" -PathType Leaf)) {
+	$null = Write-Host @"
+E: Execution Failed (file).
+E: Are You At Repository's Root Directory?
+E: Unable to Proceed.
+E: Bailing Out...
+"@
+	$global:LASTEXITCODE = 1
+	return 1
+}
+
+
+.\.internals\automaton\Start.sh.ps1 help
+if ($LASTEXITCODE -ne 0) {
+	$null = Write-Host @"
+E: Execution Failed (help).
+E: Unable to Proceed.
+E: Bailing Out...
+"@
+	$global:LASTEXITCODE = 1
+	return 1
+}
 
 
 
 
 # report status
+$global:LASTEXITCODE = 0
 return 0
