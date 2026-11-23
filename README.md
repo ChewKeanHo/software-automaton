@@ -60,6 +60,67 @@ These are the currently linked and tested platforms where
 
 
 
+## Tested Technologies
+
+[![banner](/.internals/trademarks/banner_1200x100.svg)](#)
+
+These are the tested use-cases with known technologies for reliable
+integrations into your project:
+
+* **PowerShell**
+
+  | Aspects                   | Values                               |
+  |:--------------------------|:-------------------------------------|
+  | Location                  | Here. Refer: `CI - Environment` job. |
+  | Microsoft Windows' `pwsh` | `Tested (GitHub CI)`.                |
+  | Tested Minimum Version    | `7.6.10`                             |
+* **C**
+
+  | Aspects                | Values                               |
+  |:-----------------------|:-------------------------------------|
+  | Location               | `Pending`                            |
+* **Go**
+
+  | Aspects                | Values                               |
+  |:-----------------------|:-------------------------------------|
+  | Location               | `Pending`                            |
+* **GIMP3**
+
+  | Aspects                | Values                               |
+  |:-----------------------|:-------------------------------------|
+  | Location               | `Pending`                            |
+* **LibreWriter (LibreOffice)**
+
+  | Aspects                | Values                               |
+  |:-----------------------|:-------------------------------------|
+  | Location               | `Pending`                            |
+* **Nim**
+
+  | Aspects                | Values                               |
+  |:-----------------------|:-------------------------------------|
+  | Location               | `Pending`                            |
+* **Python**
+
+  | Aspects                | Values                               |
+  |:-----------------------|:-------------------------------------|
+  | Location               | `Pending`                            |
+* **Rust**
+
+  | Aspects                | Values                               |
+  |:-----------------------|:-------------------------------------|
+  | Location               | `Pending`                            |
+* **Shell**
+
+  | Aspects                | Values                               |
+  |:-----------------------|:-------------------------------------|
+  | Location               | Here. Refer: `CI - Environment` job. |
+  | FreeBSD `sh`           | `Tested (Native Development)`.       |
+  | Ubuntu `sh`            | `Tested (GitHub CI)`.                |
+  | MacOS `sh`             | `Tested (GitHub CI)`.                |
+
+
+
+
 ## How It Works
 
 [![banner](/.internals/trademarks/banner_1200x100.svg)](#)

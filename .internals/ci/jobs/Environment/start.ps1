@@ -26,7 +26,7 @@
 
 # check powershell version
 $null = Write-Host @"
-I: Current PowerShell Version: $($PSVersionTable.PSVersion)
+I: Current PowerShell Version: $((Get-Host).Version.ToString())
 "@
 
 

@@ -114,7 +114,6 @@ fi
 AUTOMATON_interactors_libraries_fs_create_update_file \
 	"${AUTOMATON_DIRECTORY_JOBS}/${2:-}/start.ps1" \
 	"\
-#requires -Version 5.1
 # Copyright 2026 The Automaton Project Team (https://github.com/ChewKeanHo/software-automaton)
 #
 # The above unified aliases have one or more actual legal entities listed
