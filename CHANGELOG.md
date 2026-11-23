@@ -47,6 +47,16 @@ These are breaking changes requiring manual upgrades attention.
    $global:LASTEXITCODE = 0
    return
    ```
+2. **1d4388** - removed PowerShell version restriction allowing Automaton to
+   serve wider range of Microsoft Windows' already deployed ecosystems.
+
+   This affects all PowerShell scripts especially those inside `ci/jobs`
+   directory. Manual efforts are required to patch by removing the first line
+   of requirement as shown in `diff` format below:
+
+   ```
+   -#requires -Version 5.1
+   ```
 
 
 
