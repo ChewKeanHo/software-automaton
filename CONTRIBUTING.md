@@ -18,8 +18,8 @@ The repository's source structure is as follows:
 1. **`.internals/automaton/`** - the actual source codes location for
    development.
 2. **`.local/sbin/`** - the repository's automation tool.
-3. **`src/chewkeanho/idaten`** - the exported source materials.
-4. **`share/doc/chewkeanho/idaten`** - the exported documentation materials.
+3. **`src/chewkeanho/automaton`** - the exported source materials.
+4. **`share/doc/chewkeanho/automaton`** - the exported documentation materials.
 
 After cloning the repository from remote, you need to update your local
 repository's `.git/config` with the following push URLs:
@@ -36,8 +36,10 @@ repository's `.git/config` with the following push URLs:
         merge = refs/heads/main
 ```
 
-We support GitHub.com, Codeberg.org (including Forgejo), and GitLab.com as our
-primary adapters.
+We support [GitHub.com](https://github.com/),
+[Codeberg.org](https://codeberg.org/) (including
+[Forgejo](https://forgejo.org)), and
+[GitLab.com](https://gitlab.com) as our primary adapters.
 
 
 

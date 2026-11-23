@@ -57,6 +57,19 @@ These are the currently linked and tested platforms where
 | GitLab.com | `saas-linux-small-amd64`, `saas-windows-medium-amd64` | [GitLab CI Pipelines](https://gitlab.com/chewkeanho/software-automaton/-/pipelines) |
 | Local (Manual)   | `freebsd-amd64` | Not Available |
 
+> [!IMPORTANT]
+>
+> Due to [GitLab.com](https://gitlab.com) restricted CI minutes countdown, this
+> project **ONLY ENSURES** `Automaton` is capable to operate in its CI pipeline
+> **REGARDLESS** of its **PASS/FALURE** results.
+>
+> Pipeline run is also disabled (via `CI/CD configuration file` setting) and
+> **ONLY ALLOWED** to run just for debugging its `ci.yml` file only.
+>
+> For `Automaton`, we prioritize [GitHub.com](https://github.com),
+> [Codeberg.org](https://codeberg.org), and [Forgejo](https://forgejo.org) due
+> to less tip-toe-ing, better user experiences, and less drama.
+
 
 
 
