@@ -25,7 +25,7 @@
 
 
 # print demo
-$null = Write-Host "%s\n" "Hello World, from 'Deploy'."
+$null = Write-Host "Hello World, from 'Deploy'."
 
 
 
