@@ -30,9 +30,9 @@ LIST COMMAND
 This command lists all available [JOB] inside the $AUTOMATON_DIRECTORY_JOBS
 directory.
 
-There must be a 'start.sh' and a 'start.ps1' inside the [JOB] directory
-for POSIX Shell and PowerShell respectively. If either of them is missing,
-the [JOB] directory is then deemed invalid and will not be listed at all.
+There must be a 'start.sh' and a 'start.ps1' inside a [JOB] directory. If
+either of them is missing, the [JOB] directory is then deemed invalid and
+will not be listed at all.
 
 The default CI directory (when $AUTOMATON_DIRECTORY_JOBS is not explicitly
 specified) is './.internals/ci/' relative to the current directory.

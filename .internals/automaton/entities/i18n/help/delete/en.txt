@@ -30,7 +30,7 @@ DELETE COMMAND
 This command deletes a given [JOB] directory from inside the
 $AUTOMATON_DIRECTORY_JOBS directory.
 
-It removes everything inside entirely.
+It removes everything within entirely.
 
 The default CI directory (when $AUTOMATON_DIRECTORY_JOBS is not explicitly
 specified) is './.internals/ci/' relative to the current directory.
