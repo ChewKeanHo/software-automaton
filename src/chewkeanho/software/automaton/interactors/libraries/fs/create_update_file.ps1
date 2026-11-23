@@ -1,4 +1,3 @@
-#requires -Version 5.1
 # Copyright 2026 The Automaton Project Team (https://github.com/ChewKeanHo/software-automaton)
 #
 # The above unified aliases have one or more actual legal entities listed
@@ -242,10 +241,21 @@ function AUTOMATON_interactors_libraries_fs_create_update_file {
 
 				$____runtime_byte = [Convert]::ToByte($____runtime_byte, $____runtime_base)
 
-				$null = Add-Content -LiteralPath "${____input_path}.tmp.${pid}" `
-						-Value $____runtime_byte `
-						-AsByteStream `
-						-ErrorAction Stop
+				switch -WildCard -CaseSensitive ($(Get-Host).Version.ToString()) {
+				"5.*" {
+					$null = Add-Content `
+							-LiteralPath "${____input_path}.tmp.${pid}" `
+							-Value $____runtime_byte `
+							-Encoding Byte `
+							-ErrorAction Stop
+				} default {
+					# "7.*"
+					$null = Add-Content `
+							-LiteralPath "${____input_path}.tmp.${pid}" `
+							-Value $____runtime_byte `
+							-AsByteStream `
+							-ErrorAction Stop
+				}}
 			} catch {
 				$null = Remove-Item -Force -Recurse `
 					-LiteralPath "${____input_path}.tmp.${pid}" `

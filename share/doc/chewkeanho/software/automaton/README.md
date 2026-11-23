@@ -55,6 +55,79 @@ These are the currently linked and tested platforms where
 | GitLab.com | `saas-linux-small-amd64`, `saas-windows-medium-amd64` | [GitLab CI Pipelines](https://gitlab.com/chewkeanho/software-automaton/-/pipelines) |
 | Local (Manual)   | `freebsd-amd64` | Not Available |
 
+> [!IMPORTANT]
+>
+> Due to [GitLab.com](https://gitlab.com) restricted CI minutes countdown, this
+> project **ONLY ENSURES** `Automaton` is capable to operate in its CI pipeline
+> **REGARDLESS** of its **PASS/FALURE** results.
+>
+> Pipeline run is also disabled (via `CI/CD configuration file` setting) and
+> **ONLY ALLOWED** to run just for debugging its `ci.yml` file only.
+>
+> For `Automaton`, we prioritize [GitHub.com](https://github.com),
+> [Codeberg.org](https://codeberg.org), and [Forgejo](https://forgejo.org) due
+> to less tip-toe-ing, better user experiences, and less drama.
+
+
+
+
+## Tested Technologies
+
+
+These are the tested use-cases with known technologies for reliable
+integrations into your project:
+
+* **PowerShell**
+
+  | Aspects                   | Values                               |
+  |:--------------------------|:-------------------------------------|
+  | Location                  | Here. Refer: `CI - Environment` job. |
+  | Microsoft Windows' `pwsh` | `Tested (GitHub CI)`.                |
+  | Tested Minimum Version    | `7.6.10`                             |
+* **C**
+
+  | Aspects                | Values                               |
+  |:-----------------------|:-------------------------------------|
+  | Location               | `Pending`                            |
+* **Go**
+
+  | Aspects                | Values                               |
+  |:-----------------------|:-------------------------------------|
+  | Location               | `Pending`                            |
+* **GIMP3**
+
+  | Aspects                | Values                               |
+  |:-----------------------|:-------------------------------------|
+  | Location               | `Pending`                            |
+* **LibreWriter (LibreOffice)**
+
+  | Aspects                | Values                               |
+  |:-----------------------|:-------------------------------------|
+  | Location               | `Pending`                            |
+* **Nim**
+
+  | Aspects                | Values                               |
+  |:-----------------------|:-------------------------------------|
+  | Location               | `Pending`                            |
+* **Python**
+
+  | Aspects                | Values                               |
+  |:-----------------------|:-------------------------------------|
+  | Location               | `Pending`                            |
+* **Rust**
+
+  | Aspects                | Values                               |
+  |:-----------------------|:-------------------------------------|
+  | Location               | `Pending`                            |
+* **Shell**
+
+  | Aspects                | Values                               |
+  |:-----------------------|:-------------------------------------|
+  | Location               | Here. Refer: `CI - Environment` job. |
+  | FreeBSD `sh`           | `Tested (Native Development)`.       |
+  | Ubuntu `sh`            | `Tested (GitHub CI)`.                |
+  | MacOS `sh`             | `Tested (GitHub CI)`.                |
+
 
 
 
@@ -219,7 +292,7 @@ $ unzip -d /path/to/directory chewkeanho_automaton_1.0.0_windows_all.zip
 
 ### Copy/Overwrite into Your Repository
 
-Place or overwrite existing `.internals/automaton/` directory inside your root
+Place or overwrite existing `internals/automaton/` directory inside your root
 repository with such pathing:
 
 ```
@@ -229,7 +302,7 @@ your_project/
   |
   +-- .internals/
           |
-          +-- automaton/            <-- place or overwrite '.internals/automaton/' here
+          +-- automaton/            <-- place or overwrite 'internals/automaton/' here
 ```
 
 That is how you add|update `(Holloway) Chew, Kean Ho's Automaton` into your
@@ -280,7 +353,7 @@ your_project/
                            +-- start.sh        <-- POSIX Shell starter script
 ```
 
-1. Basically, the directory name inside `.internals/ci/jobs/` is the job name.
+1. Basically, the directory name inside `internals/ci/jobs/` is the job name.
    Have the freedom to create yours.
 2. What you NEED to make sure are:
    1. The `[JOB]` name is as intended; AND
@@ -320,7 +393,7 @@ I:      * Build
 > [!NOTE]
 >
 > For quick and lazy setup, the package actually distributes a default set of
-> tested CI jobs as `.internals/ci/` directory. Refer below for instructions.
+> tested CI jobs as `internals/ci/` directory. Refer below for instructions.
 
 
 
@@ -386,7 +459,7 @@ Once you are satisfied, you can work on your automated CI triggers like
 >           |
 >           +-- automaton/              <-- place automaton here
 >           |
->           +-- ci/                     <-- place '.internals/ci' directory here
+>           +-- ci/                     <-- place 'internals/ci' directory here
 > ```
 >
 > These default configuration files **REQUIRE** you to set the `$RUNNERS` CI

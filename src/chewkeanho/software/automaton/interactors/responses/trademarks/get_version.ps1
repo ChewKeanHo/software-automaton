@@ -1,4 +1,3 @@
-#requires -Version 5.1
 # Copyright 2026 The Automaton Project Team (https://github.com/ChewKeanHo/software-automaton)
 #
 # The above unified aliases have one or more actual legal entities listed
@@ -58,4 +57,5 @@ $(
 
 
 # report import status
-return 0
+$global:LASTEXITCODE = 0
+return

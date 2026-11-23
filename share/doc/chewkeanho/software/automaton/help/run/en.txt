@@ -30,9 +30,9 @@ RUN COMMAND
 This command executes a given [JOB] available inside the
 $AUTOMATON_DIRECTORY_JOBS directory.
 
-There must be a 'start.sh' and a 'start.ps1' inside the [JOB] directory
-for POSIX Shell and PowerShell respectively. If they are missing on execute,
-the [JOB] directory is then deemed invalid and an error will be raised.
+There must be a 'start.sh' and a 'start.ps1' inside the [JOB] directory.
+If either of them is missing, the [JOB] directory is then deemed invalid
+and an error will be raised eventhough it is perfectly executable.
 
 The default CI directory (when $AUTOMATON_DIRECTORY_JOBS is not explicitly
 specified) is './.internals/ci/' relative to the current directory.

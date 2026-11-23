@@ -12,7 +12,7 @@ It details all the version changes per release from the latest to the oldest.
 
 [![banner](/.internals/trademarks/banner_1200x100.svg)](#)
 
-* Date: `TBD`
+* Date: `2026-11-23`
 * Type: `stable`
 
 

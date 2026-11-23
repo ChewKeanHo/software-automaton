@@ -59,16 +59,11 @@ ____jobs_list="${____jobs_list%"
 
 
 
-# all good - output now
+# report status
 printf -- "%s\n" "$____jobs_list"
 if [ $? -ne 0 ]; then
 	unset ____jobs_list
 	return 1
 fi
 unset ____jobs_list
-
-
-
-
-# report status
 return 0
