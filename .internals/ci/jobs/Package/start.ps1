@@ -200,7 +200,7 @@ try {
 	$null = New-Item `
 		-ItemType Directory `
 		-Force `
-		-Path "${env:PROJECT_DIRECTORY_TMP}\.internals" `
+		-Path "${env:PROJECT_DIRECTORY_TMP}\internals" `
 		-ErrorAction Stop
 } catch {
 	$null = Write-Host @"
@@ -216,7 +216,7 @@ E: Bailing Out...
 
 try {
 	$null = Move-Item -LiteralPath "${env:PROJECT_DIRECTORY_TMP}\automaton" `
-		-Destination "${env:PROJECT_DIRECTORY_TMP}\.internals\." `
+		-Destination "${env:PROJECT_DIRECTORY_TMP}\internals\." `
 		-Force `
 		-ErrorAction Stop
 } catch {
@@ -235,7 +235,7 @@ try {
 	$null = New-Item `
 		-ItemType Directory `
 		-Force `
-		-Path "${env:PROJECT_DIRECTORY_TMP}\.internals\ci" `
+		-Path "${env:PROJECT_DIRECTORY_TMP}\internals\ci" `
 		-ErrorAction Stop
 } catch {
 	$null = Write-Host @"
@@ -278,7 +278,7 @@ E: Skipping...
 	$____directory = Split-Path -Leaf -Path $____directory
 
 	try {
-		${env:AUTOMATON_DIRECTORY_JOBS} = "${env:PROJECT_DIRECTORY_TMP}\.internals\ci"
+		${env:AUTOMATON_DIRECTORY_JOBS} = "${env:PROJECT_DIRECTORY_TMP}\internals\ci"
 		& "${env:PROJECT_DIRECTORY_INTERNAL}\automaton\Start.sh.ps1" `
 			create $____directory
 		if ($LASTEXITCODE -ne 0) {

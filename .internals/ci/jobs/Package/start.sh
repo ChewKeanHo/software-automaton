@@ -177,7 +177,7 @@ EOF
 	1>&2 printf -- "%s" "\
 I: Re-Organizing '${PROJECT_DIRECTORY_TMP}/automaton'...
 "
-mkdir -p "${PROJECT_DIRECTORY_TMP}/.internals"
+mkdir -p "${PROJECT_DIRECTORY_TMP}/internals"
 if [ $? -ne 0 ]; then
 	1>&2 printf -- "%s" "\
 E: Execution Failed.
@@ -189,7 +189,7 @@ E: Bailing Out...
 fi
 
 
-mv "${PROJECT_DIRECTORY_TMP}/automaton" "${PROJECT_DIRECTORY_TMP}/.internals/."
+mv "${PROJECT_DIRECTORY_TMP}/automaton" "${PROJECT_DIRECTORY_TMP}/internals/."
 if [ $? -ne 0 ]; then
 	1>&2 printf -- "%s" "\
 E: Execution Failed.
@@ -201,7 +201,7 @@ E: Bailing Out...
 fi
 
 
-mkdir -p "${PROJECT_DIRECTORY_TMP}/.internals/ci"
+mkdir -p "${PROJECT_DIRECTORY_TMP}/internals/ci"
 if [ $? -ne 0 ]; then
 	1>&2 printf -- "%s" "\
 E: Execution Failed.
@@ -238,7 +238,7 @@ E: Skipping...
 	fi
 
 	____directory="${____directory##*/}"
-	AUTOMATON_DIRECTORY_JOBS="${PROJECT_DIRECTORY_TMP}/.internals/ci" \
+	AUTOMATON_DIRECTORY_JOBS="${PROJECT_DIRECTORY_TMP}/internals/ci" \
 		"${PROJECT_DIRECTORY_INTERNAL}/"automaton/Start.sh.ps1 \
 			create \
 			"$____directory"
