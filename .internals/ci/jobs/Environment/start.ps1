@@ -24,8 +24,10 @@
 
 
 
-# print demo
-$null = Write-Host "Hello World, from 'Environment'."
+# check powershell version
+$null = Write-Host @"
+I: Current PowerShell Version: $($PSVersionTable.PSVersion)
+"@
 
 
 

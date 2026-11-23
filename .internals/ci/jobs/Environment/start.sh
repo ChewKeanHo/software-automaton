@@ -25,8 +25,10 @@
 
 
 
-# print demo
-1>&2 printf -- "%s\n" "Hello World, from 'Environment'."
+# check powershell version
+1>&2 printf -- "%s" "\
+I: Current Shell Version (ps|\$SHELL): |$(ps -p $$ -o comm=)|${SHELL}|
+"
 
 
 
