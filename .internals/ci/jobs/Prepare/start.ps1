@@ -37,7 +37,7 @@ E: Unable to Proceed.
 E: Bailing Out...
 "@
 	$global:LASTEXITCODE = 1
-	return 1
+	return
 }
 
 
@@ -49,7 +49,7 @@ E: Unable to Proceed.
 E: Bailing Out...
 "@
 	$global:LASTEXITCODE = 1
-	return 1
+	return
 }
 
 
@@ -57,4 +57,4 @@ E: Bailing Out...
 
 # report status
 $global:LASTEXITCODE = 0
-return 0
+return

@@ -31,4 +31,5 @@ $null = Write-Host "%s\n" "Hello World, from 'Deploy'."
 
 
 # report status
-return 0
+$global:LASTEXITCODE = 0
+return

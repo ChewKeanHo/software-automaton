@@ -31,4 +31,5 @@ $null = Write-Host "Hello World, from 'Compose'."
 
 
 # report status
-return 0
+$global:LASTEXITCODE = 0
+return

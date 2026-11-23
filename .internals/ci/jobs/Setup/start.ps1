@@ -31,4 +31,5 @@ $null = Write-Output "Hello World, from 'Setup'."
 
 
 # report status
-return 0
+$global:LASTEXITCODE = 0
+return
