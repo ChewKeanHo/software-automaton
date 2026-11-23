@@ -63,6 +63,7 @@ These are non-breaking changes requiring no manual upgrade attention.
 6. **5c2e2f** - added `CI - Prepare` scripts for self-testing
 7. **1310fc** - added `CI - Test` scripts for self-testing
 8. **389bc6** - added `CI - Package` scripts for self-packaging
+9. **4da49c** - added `CI - Environment` scripts for self-testing
 
 
 
