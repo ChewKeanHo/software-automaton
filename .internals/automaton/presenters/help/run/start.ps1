@@ -32,7 +32,7 @@ $( `
 		${env:AUTOMATON_VERSION} `
 		${env:AUTOMATON_LICENSE} `
 )
-"@ "${env:AUTOMATON_COLOR_MODE}"
+"@ ${env:AUTOMATON_COLOR_MODE}
 
 
 ## content by language
@@ -43,7 +43,7 @@ $( `
 	AUTOMATON_interactors_libraries_encodings_text_read_file_with_license_header `
 		"${env:AUTOMATON_DIRECTORY_ROOT}\entities\i18n\help\run\en.txt" `
 )
-"@ "${env:AUTOMATON_COLOR_MODE}"
+"@ ${env:AUTOMATON_COLOR_MODE}
 }}
 
 
@@ -51,4 +51,4 @@ $( `
 
 # report status
 $global:LASTEXITCODE = 0
-return 0
+return
