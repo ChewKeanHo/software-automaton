@@ -57,4 +57,5 @@ $(
 
 
 # report import status
-return 0
+$global:LASTEXITCODE = 0
+return

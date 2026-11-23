@@ -378,4 +378,4 @@ function AUTOMATON_interactors_libraries_runtimes_load_modules {
 
 # report import status
 $global:LASTEXITCODE = 0
-return 0
+return

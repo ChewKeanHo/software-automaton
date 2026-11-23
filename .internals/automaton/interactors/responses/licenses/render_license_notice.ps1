@@ -76,4 +76,5 @@ function AUTOMATON_interactors_responses_licenses_render_license_notice {
 
 
 # report import status
-return 0
+$global:LASTEXITCODE = 0
+return

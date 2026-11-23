@@ -178,4 +178,4 @@ function AUTOMATON_interactors_libraries_encodings_conf_read_file {
 
 # report import status
 $global:LASTEXITCODE = 0
-return 0
+return
