@@ -8,7 +8,7 @@ It details all the version changes per release from the latest to the oldest.
 
 
 
-# Version `v2.0.1`
+# Version `v2.1.0`
 
 [![banner](/.internals/trademarks/banner_1200x100.svg)](#)
 
@@ -29,7 +29,9 @@ These are breaking changes requiring manual upgrades attention.
 
 These are non-breaking changes requiring no manual upgrade attention.
 
-1. **e8da6f** - Remove all XuanQi's artifact residues
+1. **e8da6f** - remove all XuanQi's artifact residues
+2. **1283af** - switch license to using DOI URL instead of GitHub.com URL
+3. **fe2e6e** - improved module import algorithm
 
 
 
