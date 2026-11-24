@@ -25,7 +25,7 @@
 
 
 
-# check XuanQi's health and status
+# check Automaton's health and status
 1>&2 printf -- "%s" "\
 I: Checking Automaton's Usability...
 "
@@ -123,7 +123,7 @@ fi
 
 
 1>&2 printf -- "%s" "\
-I: Testing Automaton's Version Run API...
+I: Testing Automaton's Run Help API...
 "
 ./.internals/automaton/Start.sh.ps1 help run
 if [ $? -ne 0 ]; then

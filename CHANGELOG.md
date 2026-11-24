@@ -8,6 +8,32 @@ It details all the version changes per release from the latest to the oldest.
 
 
 
+# Version `v2.0.1`
+
+[![banner](/.internals/trademarks/banner_1200x100.svg)](#)
+
+* Date: `TBD`
+* Type: `stable`
+
+
+
+### Non-Backward Compatible
+
+These are breaking changes requiring manual upgrades attention.
+
+1. **None**.
+
+
+
+### Backward Compatible
+
+These are non-breaking changes requiring no manual upgrade attention.
+
+1. **Commit ID TBD** - Remove all XuanQi's artifact residues
+
+
+
+
 ## Version `v2.0.0`
 
 [![banner](/.internals/trademarks/banner_1200x100.svg)](#)

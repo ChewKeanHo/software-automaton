@@ -24,7 +24,7 @@
 
 
 
-# check XuanQi's health and status
+# check Automaton's health and status
 $null = Write-Host @"
 I: Checking Automaton's Usability...
 "@
@@ -128,7 +128,7 @@ E: Bailing Out...
 
 
 $null = Write-Host @"
-I: Testing Automaton's run Help API...
+I: Testing Automaton's Run Help API...
 "@
 .\.internals\automaton\Start.sh.ps1 help run
 if ($LASTEXITCODE -ne 0) {
