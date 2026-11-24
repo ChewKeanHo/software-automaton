@@ -29,7 +29,7 @@ These are breaking changes requiring manual upgrades attention.
 
 These are non-breaking changes requiring no manual upgrade attention.
 
-1. **Commit ID TBD** - Remove all XuanQi's artifact residues
+1. **e8da6f** - Remove all XuanQi's artifact residues
 
 
 
