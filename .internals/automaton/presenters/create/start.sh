@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright 2026 The Automaton Project Team (https://github.com/ChewKeanHo/software-automaton)
+# Copyright 2026 The Automaton Project Team (https://doi.org/10.5281/zenodo.23129070)
 #
 # The above unified aliases have one or more actual legal entities listed
 # outside of this document: (1) 'CREATORS.txt' or 'AUTHORS.txt'; and
@@ -75,7 +75,7 @@ AUTOMATON_interactors_libraries_fs_create_update_file \
 	"${AUTOMATON_DIRECTORY_JOBS}/${2:-}/start.sh" \
 	"\
 #!/bin/sh
-# Copyright 2026 The Automaton Project Team (https://github.com/ChewKeanHo/software-automaton)
+# Copyright 2026 The Automaton Project Team (https://doi.org/10.5281/zenodo.23129070)
 #
 # The above unified aliases have one or more actual legal entities listed
 # outside of this document: (1) 'CREATORS.txt' or 'AUTHORS.txt'; and
@@ -114,7 +114,7 @@ fi
 AUTOMATON_interactors_libraries_fs_create_update_file \
 	"${AUTOMATON_DIRECTORY_JOBS}/${2:-}/start.ps1" \
 	"\
-# Copyright 2026 The Automaton Project Team (https://github.com/ChewKeanHo/software-automaton)
+# Copyright 2026 The Automaton Project Team (https://doi.org/10.5281/zenodo.23129070)
 #
 # The above unified aliases have one or more actual legal entities listed
 # outside of this document: (1) 'CREATORS.txt' or 'AUTHORS.txt'; and

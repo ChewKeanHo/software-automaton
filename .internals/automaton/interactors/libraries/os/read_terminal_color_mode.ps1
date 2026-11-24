@@ -1,4 +1,4 @@
-# Copyright 2026 The Automaton Project Team (https://github.com/ChewKeanHo/software-automaton)
+# Copyright 2026 The Automaton Project Team (https://doi.org/10.5281/zenodo.23129070)
 #
 # The above unified aliases have one or more actual legal entities listed
 # outside of this document: (1) 'CREATORS.txt' or 'AUTHORS.txt'; and
@@ -75,11 +75,6 @@ function AUTOMATON_interactors_libraries_os_read_terminal_color_mode {
 		$global:LASTEXITCODE = 0
 		return '1'
 	}}
-
-
-	# report status
-	$global:LASTEXITCODE = 0
-	return 0
 }
 
 

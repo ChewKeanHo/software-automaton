@@ -1,7 +1,7 @@
 echo \" <<'RUN_AS_BATCH' >/dev/null ">NUL "\" \`" <#"
 @ECHO OFF
 REM ----------------------------------------------------------------------------
-REM Copyright 2026 The Automaton Project Team (https://github.com/ChewKeanHo/software-automaton)
+REM Copyright 2026 The Automaton Project Team (https://doi.org/10.5281/zenodo.23129070)
 REM
 REM The above unified aliases have one or more actual legal entities listed
 REM outside of this document: (1) 'CREATORS.txt' or 'AUTHORS.txt'; and
@@ -201,7 +201,7 @@ ____init_directory="automaton/presenters"
 ____init_package_name="Automaton"
 
 ____init_macos_bundle_name="${____init_package_name}.app"
-____init_macos_directory="namespace"
+____init_macos_directory="chewkeanho/software"
 
 
 

@@ -80,13 +80,6 @@ These are the currently linked and tested platforms where
 These are the tested use-cases with known technologies for reliable
 integrations into your project:
 
-* **PowerShell**
-
-  | Aspects                   | Values                               |
-  |:--------------------------|:-------------------------------------|
-  | Location                  | Here. Refer: `CI - Environment` job. |
-  | Microsoft Windows' `pwsh` | `Tested (GitHub CI)`.                |
-  | Tested Minimum Version    | `7.6.10`                             |
 * **C**
 
   | Aspects                | Values                               |
@@ -112,6 +105,16 @@ integrations into your project:
   | Aspects                | Values                               |
   |:-----------------------|:-------------------------------------|
   | Location               | `Pending`                            |
+* **PowerShell**
+
+  | Aspects                   | Values                                |
+  |:--------------------------|:--------------------------------------|
+  | Location                  | Here. Refer: `CI - Environment` job.  |
+  | Microsoft Windows' `pwsh` | `Tested (GitHub CI)`.                 |
+  | FreeBSD `pwsh`            | `Not Tested (Unplanned) - Use Shell`. |
+  | Ubuntu `pwsh`             | `Not Tested (Unplanned) - Use Shell`. |
+  | MacOS `pwsh`              | `Not Tested (Unplanned) - Use Shell`. |
+  | Tested Minimum Version    | `7.6.10`                              |
 * **Python**
 
   | Aspects                | Values                               |
@@ -124,12 +127,15 @@ integrations into your project:
   | Location               | `Pending`                            |
 * **Shell**
 
-  | Aspects                | Values                               |
-  |:-----------------------|:-------------------------------------|
-  | Location               | Here. Refer: `CI - Environment` job. |
-  | FreeBSD `sh`           | `Tested (Native Development)`.       |
-  | Ubuntu `sh`            | `Tested (GitHub CI)`.                |
-  | MacOS `sh`             | `Tested (GitHub CI)`.                |
+  | Aspects                   | Values                                     |
+  |:--------------------------|:-------------------------------------------|
+  | Location                  | Here. Refer: `CI - Environment` job.       |
+  | Microsoft Windows' WSL    | `Not Tested (Unplanned) - Use PowerShell`. |
+  | Microsoft Windows' MingW  | `Not Tested (Unplanned) - Use PowerShell`. |
+  | Microsoft Windows' Cygwin | `Not Tested (Unplanned) - Use PowerShell`. |
+  | FreeBSD `sh`              | `Tested (Native Development)`.             |
+  | Ubuntu `sh`               | `Tested (GitHub CI)`.                      |
+  | MacOS `sh`                | `Tested (GitHub CI)`.                      |
 
 
 
@@ -603,7 +609,7 @@ DOI: 10.5281/zenodo.23129070
 License: BSD Zero Clause License (https://opensource.org/licenses/0BSD)
 Repository Made On: 2026-09-09
 Repository Made From: Malaysia, South East Asia
-Procure: https://github.com/ChewKeanHo/software-automaton
+Procure: https://doi.org/10.5281/zenodo.23129070
 ```
 
 > [!CAUTION]

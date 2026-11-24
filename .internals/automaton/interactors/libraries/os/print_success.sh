@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright 2026 The Automaton Project Team (https://github.com/ChewKeanHo/software-automaton)
+# Copyright 2026 The Automaton Project Team (https://doi.org/10.5281/zenodo.23129070)
 #
 # The above unified aliases have one or more actual legal entities listed
 # outside of this document: (1) 'CREATORS.txt' or 'AUTHORS.txt'; and
@@ -26,8 +26,8 @@
 
 
 # Description:
-# `AUTOMATON_interactors_libraries_os_print_success` is to print a given intepreted
-# content into the terminal's STDERR console.
+# `AUTOMATON_interactors_libraries_os_print_success` is to print a given
+# intepreted content into the terminal's STDERR console.
 #
 # The content is printed success when color is enabled.
 # Parameters:
