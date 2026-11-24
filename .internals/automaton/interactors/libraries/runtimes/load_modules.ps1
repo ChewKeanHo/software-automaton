@@ -67,7 +67,9 @@
 #
 #					Default is '10'.
 # Outputs:
-#	(1) Imported Modules		The modules are imported.
+#	(1) Imported Modules		The modules are implicitly imported.
+#	(2) Error Module Path		The module filepath containing an error.
+#					Empty when successful.
 # Exit Codes:
 #	'0'
 #		*	means ok.
@@ -287,16 +289,18 @@ function AUTOMATON_interactors_libraries_runtimes_load_modules {
 					continue loop
 				}
 
-				$null = . AUTOMATON_interactors_libraries_runtimes_load_modules `
+				$____runtime_error = . AUTOMATON_interactors_libraries_runtimes_load_modules `
 						$____runtime_import_item `
 						([string]($____runtime_depth - 1))
 				$____runtime_depth = $____runtime_depth + 1
 				switch ($global:LASTEXITCODE) {
 				0 {
 				} 4 {
+					Write-Output $____runtime_error
 					$global:LASTEXITCODE = 4
 					return
 				} default {
+					Write-Output $____runtime_error
 					$global:LASTEXITCODE = 3
 					return
 				}}
@@ -326,10 +330,12 @@ function AUTOMATON_interactors_libraries_runtimes_load_modules {
 				$global:LASTEXITCODE = 0
 				$null = . $____runtime_import_item
 			} catch {
+				Write-Output $____runtime_import_item
 				$global:LASTEXITCODE = 3
 				return
 			}
 			if ($global:LASTEXITCODE -ne 0) {
+				Write-Output $____runtime_import_item
 				$global:LASTEXITCODE = 3
 				return
 			}

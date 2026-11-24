@@ -166,12 +166,7 @@ E: Failed to Locate Init File. Bailing Out...
 try {
 	. $env:AUTOMATON_DIRECTORY @args
 } catch {
-	if (
-		($global:LASTEXITCODE -eq $null) -or
-		(-not ($global:LASTEXITCODE -match '^[0-9]*$'))
-	) {
-		$global:LASTEXITCODE = 1
-	}
+	$global:LASTEXITCODE = 1
 }
 
 if ($global:LASTEXITCODE -eq $null) {

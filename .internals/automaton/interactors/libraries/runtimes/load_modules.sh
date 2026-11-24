@@ -58,7 +58,9 @@
 #
 #					Default is '10'.
 # Outputs:
-#	(1) Imported Modules		The modules are imported.
+#	(1) Imported Modules		The modules are implicitly imported.
+#	(2) Error Module Path		The module filepath containing an error.
+#					Empty when successful.
 # Exit Codes:
 #	'0'
 #		*	means ok.
@@ -244,6 +246,7 @@ AUTOMATON_interactors_libraries_runtimes_load_modules() {
 		## all good - import now
 		. "$____runtime_import_item"
 		if [ $? -ne 0 ]; then
+			printf -- "%s\n" "$____runtime_import_item"
 			unset ____runtime_scan_directory \
 				____runtime_import_item \
 				____runtime_import_target
